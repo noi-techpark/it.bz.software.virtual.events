@@ -1,4 +1,50 @@
 # events-jitsi
+## Infrastructure
+### ECS: 
+Container Service and main part, currently 2 Clusters deployed:
+Production: "jitsi-cluster" with type c5x.large
+Staging: "jitsi-staging-cluster" with type c5a.large
+
+Cluster Features:
+- Services: Jitsi and Matrix are running via service. Here you can define the task verion (see below for more details about tasks), launch type (should be EC2), cluster, ...
+To deploy a new task version, update the corresponding service and select the right version under "Revision".
+
+- Tasks: shows the current running tasks with some details. This tasks are started either manually, or in our case via service. In case of app issues, the tasks can be stopped and the service will automatically start new tasks (this can take up to 1min and no data is lost).
+
+- ECS Instances: shows the running instances in the cluster
+
+- Metrics: shows the overall cluster utilization
+
+- scheduled tasks: not in use
+
+- Tags: TBD
+
+- capacity provider: shows the auto scaling possibility
+
+Task Definition:
+Contains all the configuration for the container deployment. Every new configuration/change creates a new version of this task.
+A task contains container specific configuration (memory limit, volume, env. variables, ...) and task specific configurations (e.g. task memory usage, conatiners to run, volumes - efs to use by container, ...).
+
+### Auto scaling group
+
+Contains auto scaling behavious for prod and staging cluster. Currently only Prod. scales out at 75% CPU usage and scales in at 25%. Under "Instance management" the primary EC2 is scale in protected, so there is no service down during scale in actions.
+
+### EFS: Storage
+
+Persistance storage for jitsi and matrix (e.g. DB-, config-, ... files). 2 EFS currently in use for prod and staging:
+jitsi-matrix-efs - fs-b61d8482
+jitsi-matrix-efs-staging - fs-bce67e88
+
+On the EFS there are subfolders for every matrix and jitsi component.
+
+### ELB:
+Application Loadbalancer with URL based forwarding
+
+One for each environment. The ELB uses target groups (points to EC2 with a specific port) to route traffic with a specific URL to the right container (e.g. element.virtual.software.bz.it to EC2 port 8080)
+
+### Route53:
+
+Contains all the needed C-Name records.
 
 ## Jitsi tipps and tricks
 
