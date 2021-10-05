@@ -59,6 +59,24 @@ To _hide the logo_, just rename it:
 mv watermark.svg watermark.svg_ba
 </pre>
 
+* if the volume is not mounted, move the image inside of the container
+* <pre>docker exec -it "jitsi-meet-web" mv /usr/share/jitsi-meet/images/watermark.svg /usr/share/jitsi-meet/images/watermark.svg_ba</pre>
+
+EFS mount command:
+<pre>
+yum install -y amazon-efs-utils
+apt-get -y install amazon-efs-utils
+yum install -y nfs-utils
+apt-get -y install nfs-common
+# replace the ID with the actual EFS ID
+file_system_id_1=fs-123456
+efs_mount_point_1=/mnt/efs/fs1
+mkdir -p "${efs_mount_point_1}"
+test -f "/sbin/mount.efs" && printf "\n${file_system_id_1}:/ ${efs_mount_point_1} efs tls,_netdev\n" >> /etc/fstab || printf "\n${file_system_id_1}.efs.eu-west-1.amazonaws.com:/ ${efs_mount_point_1} nfs4 nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport,_netdev 0 0\n" >> /etc/fstab
+test -f "/sbin/mount.efs" && grep -ozP 'client-info]\nsource' '/etc/amazon/efs/efs-utils.conf'; if [[ $? == 1 ]]; then printf "\n[client-info]\nsource=liw\n" >> /etc/amazon/efs/efs-utils.conf; fi;
+retryCnt=15; waitTime=30; while true; do mount -a -t efs,nfs4 defaults; if [ $? = 0 ] || [ $retryCnt -lt 1 ]; then echo File system mounted successfully; break; fi; echo File system not available, retrying to mount.; ((retryCnt--)); sleep $waitTime; done;
+</pre>
+
 To _change the logo_, upload a new SVG file to the EC2 instance, name it "watermark.svg" and copy it into the folder `/mnt/efs/fs1/jitsi/jitsi-meet/images/`
 
 Please note that the old image might still be cached in your browser, so you might not see the change immediately.
