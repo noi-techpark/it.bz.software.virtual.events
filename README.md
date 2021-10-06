@@ -56,10 +56,10 @@ To _hide the logo_, just rename it:
 
 * Log in to the EC2 instance and perform the following command:
 * <pre>cd /mnt/efs/fs1/jitsi/jitsi-meet/images/
-mv watermark.svg watermark.svg_ba
-</pre>
+  mv watermark.svg watermark.svg_ba
+  </pre>
 
-* if the volume is not mounted, move the image inside of the container
+* If the volume is not mounted, move the image inside of the container
 * <pre>docker exec -it "jitsi-meet-web" mv /usr/share/jitsi-meet/images/watermark.svg /usr/share/jitsi-meet/images/watermark.svg_ba</pre>
 
 EFS mount command:
@@ -91,5 +91,5 @@ Copy the full name of the prosody container, it will look somewhat like this: _e
 
 Execute the following command (exchange the container name, user name and password accordingly):
 <pre>
-docker exec <CONTAINER-NAME> prosodyctl --config /config/prosody.cfg.lua register <USERNAME> meet.jitsi <PASSWORD>
+docker exec CONTAINER-NAME prosodyctl --config /config/prosody.cfg.lua register USERNAME meet.jitsi PASSWORD
 </pre>
