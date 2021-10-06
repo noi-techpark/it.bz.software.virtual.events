@@ -1,11 +1,13 @@
-# events-jitsi
+# Jitsi, Matrix
 ## Infrastructure
 ### ECS: 
 Container Service and main part, currently 2 Clusters deployed:
 Production: "jitsi-cluster" with type c5x.large
 Staging: "jitsi-staging-cluster" with type c5a.large
 
-Cluster Features:
+Jitsi and Matrix is running on these clusters.
+
+#### Cluster Features:
 - Services: Jitsi and Matrix are running via service. Here you can define the task verion (see below for more details about tasks), launch type (should be EC2), cluster, ...
 To deploy a new task version, update the corresponding service and select the right version under "Revision".
 
@@ -21,7 +23,7 @@ To deploy a new task version, update the corresponding service and select the ri
 
 - capacity provider: shows the auto scaling possibility
 
-Task Definition:
+#### Task Definition:
 Contains all the configuration for the container deployment. Every new configuration/change creates a new version of this task.
 A task contains container specific configuration (memory limit, volume, env. variables, ...) and task specific configurations (e.g. task memory usage, conatiners to run, volumes - efs to use by container, ...).
 
@@ -29,11 +31,14 @@ A task contains container specific configuration (memory limit, volume, env. var
 
 Contains auto scaling behavious for prod and staging cluster. Currently only Prod. scales out at 75% CPU usage and scales in at 25%. Under "Instance management" the primary EC2 is scale in protected, so there is no service down during scale in actions.
 
+Prod: amazon-ecs-cli-setup-jitsi-cluster-EcsInstanceAsg-1O8VE9KX1Q9YM
+Staging: amazon-ecs-cli-setup-jitsi-cluster-staging-EcsInstanceAsg-2VGMNODF5M4G
+
 ### EFS: Storage
 
 Persistance storage for jitsi and matrix (e.g. DB-, config-, ... files). 2 EFS currently in use for prod and staging:
-jitsi-matrix-efs - fs-b61d8482
-jitsi-matrix-efs-staging - fs-bce67e88
+Prod: jitsi-matrix-efs - fs-b61d8482
+Staging: jitsi-matrix-efs-staging - fs-bce67e88
 
 On the EFS there are subfolders for every matrix and jitsi component.
 
@@ -41,6 +46,9 @@ On the EFS there are subfolders for every matrix and jitsi component.
 Application Loadbalancer with URL based forwarding
 
 One for each environment. The ELB uses target groups (points to EC2 with a specific port) to route traffic with a specific URL to the right container (e.g. element.virtual.software.bz.it to EC2 port 8080)
+
+Prod: jitsi-matrix-lb
+Staging: jitsi-matrix-lb-staging
 
 ### Route53:
 
@@ -93,3 +101,8 @@ Execute the following command (exchange the container name, user name and passwo
 <pre>
 docker exec CONTAINER-NAME prosodyctl --config /config/prosody.cfg.lua register USERNAME meet.jitsi PASSWORD
 </pre>
+
+## Matrix tipps and tricks
+
+add admin user to Matrix/Elements. This is required to create communities:
+<pre>docker exec -it postgres psql -U synapse synapse -c "update users set admin=1 where name='@username:matrix.virtual.software.bz.it';"</pre>
