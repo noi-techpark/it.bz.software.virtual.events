@@ -50,17 +50,17 @@ Contains all the needed C-Name records.
 
 ### Change/Hide the logo in Jitsi meetings
 
-The Jitsi logo used as watermark in meetings is stored in the docker-container at /usr/share/jitsi-meet/images/watermark.svg. T
+The Jitsi logo used as watermark in meetings is stored in the docker-container at /usr/share/jitsi-meet/images/watermark.svg.
 
 To _hide the logo_, just rename it:
 
-* Log in to the EC2 instance and perform the following command:
-* <pre>cd /mnt/efs/fs1/jitsi/jitsi-meet/images/
-  mv watermark.svg watermark.svg_ba
-  </pre>
+Log in to the EC2 instance and perform the following command:
+<pre>cd /mnt/efs/fs1/jitsi/jitsi-meet/images/
+mv watermark.svg watermark.svg_ba
+</pre>
 
-* If the volume is not mounted, move the image inside of the container
-* <pre>docker exec -it "jitsi-meet-web" mv /usr/share/jitsi-meet/images/watermark.svg /usr/share/jitsi-meet/images/watermark.svg_ba</pre>
+If the volume is not mounted, move the image inside of the container
+<pre>docker exec -it "jitsi-meet-web" mv /usr/share/jitsi-meet/images/watermark.svg /usr/share/jitsi-meet/images/watermark.svg_ba</pre>
 
 EFS mount command:
 <pre>
