@@ -1,26 +1,3 @@
-<<<<<<< HEAD
-## events-jitsi
-# Infrastructure
-ECS: Container Service and main part, currently 2 Clusters deployed:
-Production with type c5x.large
-Staging with type c5a.large
-
-Cluster Features:
-Services: Jitsi and Matrix are running via service. Here you can define the task verion (see below for more details about tasks), launch type (should be EC2), cluster, ...
-To deploy a new task version, update the corresponding service and select the right version under "Revision".
-
-Tasks: shows the current running tasks with some details. This tasks are started either manually, or in our case via service. In case of app issues, the tasks can be stopped and the service will automatically start new tasks (this can take up to 1min and no data is lost).
-
-ECS Instances: shows the running instances in the cluster
-
-
-
-EFS: Storage
-
-ELB: Application Loadbalancer with URL based forwarding
-
-Route53: for C-Name records
-=======
 # Jitsi, Matrix
 ## Infrastructure
 ### ECS: 
@@ -76,7 +53,6 @@ Staging: jitsi-matrix-lb-staging
 ### Route53:
 
 Contains all the needed C-Name records.
->>>>>>> 3ddf3ba43f9193c918c8f174e8da0765a49dc54e
 
 ## Jitsi tipps and tricks
 
