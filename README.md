@@ -1,4 +1,4 @@
-# Jitsi, Matrix
+# Jitsi, Matrix/Element 
 ## Infrastructure
 ### ECS: 
 Container Service and main part, currently 2 Clusters deployed:
@@ -102,7 +102,50 @@ Execute the following command (exchange the container name, user name and passwo
 docker exec CONTAINER-NAME prosodyctl --config /config/prosody.cfg.lua register USERNAME meet.jitsi PASSWORD
 </pre>
 
-## Matrix tipps and tricks
+## Matrix/Element tipps and tricks
+
+### Admin users
 
 add admin user to Matrix/Elements. This is required to create communities:
 <pre>docker exec -it postgres psql -U synapse synapse -c "update users set admin=1 where name='@username:matrix.virtual.software.bz.it';"</pre>
+
+
+### Customisation
+
+#### Welcome page background image
+
+1. Upload a JPG (<1MB recommended) to the server.
+2. In order to do any changes, you will need sudo permissions. Execute the following command to switch to the root user:
+    `sudo bash`
+3. Copy the image into the element theme background folder:
+
+    `cp <PATH-TO-IMAGE>/element_background.jpg /mnt/efs/fs1/matrix/element/themes/element/img/backgrounds/`
+4. Alter the element config in order to use the new image. Go into the element directory and open config.json with any editer (e.g. vim or nano)
+
+    <pre>
+    cd /mnt/efs/fs1/matrix/element
+    nano config.json
+    </pre>
+
+5. In the JSON file, edit the "branding" section as followed. If the section does not exist yet, add it to the file.
+
+    <pre>
+    {
+        ...
+        "brand": "Element",
+        "branding": {
+            "welcomeBackgroundUrl": "themes/element/img/backgrounds/element_background.jpg"
+        },
+        ...
+    }
+    </pre>
+
+6. In order to apply the changes, the synapse docker container needs to be restarted. There are 2 ways to to this:
+    1. via the ECS dashboard
+    2. directly on the VM, simply stop the corresponding container (`docker stop <CONTAINER-NAME>`), ECS will automatically restart it ASAP.
+
+#### Rename Widgets
+
+See [How to rename widgets](docs/How_to_rename_widgets.pdf).
+
+
