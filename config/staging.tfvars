@@ -1,6 +1,6 @@
 region = "eu-west-1"
 
-cluster_name = "jitsi-cluster-staging"
+ecs_cluster_name = "jitsi-cluster-staging"
 
 ec2_instance_type = "c5a.large"
 

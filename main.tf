@@ -14,6 +14,11 @@ provider "aws" {
     # SECRECT ACCESS KEY
 }
 
+module "ecs" {
+  source = "./modules/ecs"
+  ecs_cluster_name = var.ecs_cluster_name
+}
+
 module "efs" {
     source = "./modules/efs"
     efs_name = var.efs_name
@@ -33,3 +38,4 @@ module "ec2" {
       module.efs
     ]
 }
+

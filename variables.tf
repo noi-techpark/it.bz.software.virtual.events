@@ -2,9 +2,9 @@ variable "region" {
     type = string
 }
 
-# Cluster
+# ECS Cluster
 
-variable "cluster_name" {
+variable "ecs_cluster_name" {
     type = string
 }
 
