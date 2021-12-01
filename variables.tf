@@ -2,6 +2,22 @@ variable "region" {
   type = string
 }
 
+variable "ecs_task_values_jitsi" {
+  type = map(any)
+}
+
+variable "ecs_task_volumes_jitsi" {
+  type = list(map(any))
+}
+
+variable "ecs_task_values_matrix" {
+  type = map(any)
+}
+
+variable "ecs_task_volumes_matrix" {
+  type = list(map(any))
+}
+
 # ECS Cluster
 
 #variable "ecs_cluster_name" {

@@ -1,1029 +1,973 @@
-{
-    "taskDefinition": {
-        "taskDefinitionArn": "arn:aws:ecs:eu-west-1:755952719952:task-definition/jitsi-meet-task-staging:15",
-        "containerDefinitions": [
+[
+    {
+        "name": "web",
+        "image": "jitsi/web:stable-6433",
+        "cpu": 0,
+        "memory": 256,
+        "links": [
+            "prosody:xmpp.meet.jitsi"
+        ],
+        "portMappings": [
             {
-                "name": "web",
-                "image": "jitsi/web:stable-6433",
-                "cpu": 0,
-                "memory": 256,
-                "links": [
-                    "prosody:xmpp.meet.jitsi"
-                ],
-                "portMappings": [
-                    {
-                        "containerPort": 80,
-                        "hostPort": 8000,
-                        "protocol": "tcp"
-                    },
-                    {
-                        "containerPort": 443,
-                        "hostPort": 8443,
-                        "protocol": "tcp"
-                    }
-                ],
-                "essential": true,
-                "entryPoint": [],
-                "command": [],
-                "environment": [
-                    {
-                        "name": "ENABLE_PREJOIN_PAGE",
-                        "value": ""
-                    },
-                    {
-                        "name": "CONFCODE_URL",
-                        "value": ""
-                    },
-                    {
-                        "name": "ENABLE_FILE_RECORDING_SERVICE_SHARING",
-                        "value": ""
-                    },
-                    {
-                        "name": "ENABLE_XMPP_WEBSOCKET",
-                        "value": "0"
-                    },
-                    {
-                        "name": "TZ",
-                        "value": "UTC"
-                    },
-                    {
-                        "name": "ENABLE_AUTH",
-                        "value": ""
-                    },
-                    {
-                        "name": "ENABLE_SUBDOMAINS",
-                        "value": ""
-                    },
-                    {
-                        "name": "INVITE_SERVICE_URL",
-                        "value": ""
-                    },
-                    {
-                        "name": "ENABLE_STATS_ID",
-                        "value": ""
-                    },
-                    {
-                        "name": "START_AUDIO_ONLY",
-                        "value": ""
-                    },
-                    {
-                        "name": "ENABLE_GUESTS",
-                        "value": ""
-                    },
-                    {
-                        "name": "DESKTOP_SHARING_FRAMERATE_MIN",
-                        "value": ""
-                    },
-                    {
-                        "name": "CALLSTATS_SECRET",
-                        "value": ""
-                    },
-                    {
-                        "name": "CHROME_EXTENSION_BANNER_JSON",
-                        "value": ""
-                    },
-                    {
-                        "name": "DEFAULT_LANGUAGE",
-                        "value": ""
-                    },
-                    {
-                        "name": "CONFIG_EXTERNAL_CONNECT",
-                        "value": ""
-                    },
-                    {
-                        "name": "DISABLE_HTTPS",
-                        "value": ""
-                    },
-                    {
-                        "name": "ENABLE_WELCOME_PAGE",
-                        "value": ""
-                    },
-                    {
-                        "name": "TESTING_CAP_SCREENSHARE_BITRATE",
-                        "value": ""
-                    },
-                    {
-                        "name": "ENABLE_CALENDAR",
-                        "value": ""
-                    },
-                    {
-                        "name": "NGINX_RESOLVER",
-                        "value": ""
-                    },
-                    {
-                        "name": "XMPP_MUC_DOMAIN",
-                        "value": "muc.meet.jitsi"
-                    },
-                    {
-                        "name": "TOKEN_AUTH_URL",
-                        "value": ""
-                    },
-                    {
-                        "name": "ANALYTICS_WHITELISTED_EVENTS",
-                        "value": ""
-                    },
-                    {
-                        "name": "ENABLE_RECORDING",
-                        "value": "0"
-                    },
-                    {
-                        "name": "AMPLITUDE_ID",
-                        "value": ""
-                    },
-                    {
-                        "name": "START_SILENT",
-                        "value": ""
-                    },
-                    {
-                        "name": "ENABLE_IPV6",
-                        "value": ""
-                    },
-                    {
-                        "name": "ENABLE_P2P",
-                        "value": ""
-                    },
-                    {
-                        "name": "START_VIDEO_MUTED",
-                        "value": ""
-                    },
-                    {
-                        "name": "RESOLUTION",
-                        "value": ""
-                    },
-                    {
-                        "name": "ANALYTICS_SCRIPT_URLS",
-                        "value": ""
-                    },
-                    {
-                        "name": "ENABLE_COLIBRI_WEBSOCKET",
-                        "value": "0"
-                    },
-                    {
-                        "name": "ENABLE_TCC",
-                        "value": ""
-                    },
-                    {
-                        "name": "ENABLE_NO_AUDIO_DETECTION",
-                        "value": ""
-                    },
-                    {
-                        "name": "ENABLE_REMB",
-                        "value": ""
-                    },
-                    {
-                        "name": "ENABLE_FLOC",
-                        "value": ""
-                    },
-                    {
-                        "name": "START_WITH_VIDEO_MUTED",
-                        "value": ""
-                    },
-                    {
-                        "name": "XMPP_AUTH_DOMAIN",
-                        "value": "auth.meet.jitsi"
-                    },
-                    {
-                        "name": "DYNAMIC_BRANDING_URL",
-                        "value": ""
-                    },
-                    {
-                        "name": "DESKTOP_SHARING_FRAMERATE_MAX",
-                        "value": ""
-                    },
-                    {
-                        "name": "ENABLE_LETSENCRYPT",
-                        "value": ""
-                    },
-                    {
-                        "name": "XMPP_GUEST_DOMAIN",
-                        "value": "guest.meet.jitsi"
-                    },
-                    {
-                        "name": "NGINX_WORKER_PROCESSES",
-                        "value": ""
-                    },
-                    {
-                        "name": "ENABLE_TRANSCRIPTIONS",
-                        "value": ""
-                    },
-                    {
-                        "name": "DEPLOYMENTINFO_REGION",
-                        "value": ""
-                    },
-                    {
-                        "name": "ENABLE_NOISY_MIC_DETECTION",
-                        "value": ""
-                    },
-                    {
-                        "name": "MICROSOFT_API_APP_CLIENT_ID",
-                        "value": ""
-                    },
-                    {
-                        "name": "RESOLUTION_MIN",
-                        "value": ""
-                    },
-                    {
-                        "name": "START_BITRATE",
-                        "value": ""
-                    },
-                    {
-                        "name": "MATOMO_ENDPOINT",
-                        "value": ""
-                    },
-                    {
-                        "name": "NGINX_WORKER_CONNECTIONS",
-                        "value": ""
-                    },
-                    {
-                        "name": "DIALOUT_AUTH_URL",
-                        "value": ""
-                    },
-                    {
-                        "name": "DIALOUT_CODES_URL",
-                        "value": ""
-                    },
-                    {
-                        "name": "MATOMO_SITE_ID",
-                        "value": ""
-                    },
-                    {
-                        "name": "CALLSTATS_ID",
-                        "value": ""
-                    },
-                    {
-                        "name": "DROPBOX_REDIRECT_URI",
-                        "value": ""
-                    },
-                    {
-                        "name": "START_WITH_AUDIO_MUTED",
-                        "value": ""
-                    },
-                    {
-                        "name": "DEPLOYMENTINFO_ENVIRONMENT_TYPE",
-                        "value": ""
-                    },
-                    {
-                        "name": "DEPLOYMENTINFO_SHARD",
-                        "value": ""
-                    },
-                    {
-                        "name": "ETHERPAD_URL_BASE",
-                        "value": ""
-                    },
-                    {
-                        "name": "CALLSTATS_CUSTOM_SCRIPT_URL",
-                        "value": ""
-                    },
-                    {
-                        "name": "ENABLE_FILE_RECORDING_SERVICE",
-                        "value": ""
-                    },
-                    {
-                        "name": "ENABLE_CLOSE_PAGE",
-                        "value": ""
-                    },
-                    {
-                        "name": "DISABLE_DEEP_LINKING",
-                        "value": ""
-                    },
-                    {
-                        "name": "PEOPLE_SEARCH_URL",
-                        "value": ""
-                    },
-                    {
-                        "name": "ENABLE_LIPSYNC",
-                        "value": ""
-                    },
-                    {
-                        "name": "ENABLE_HSTS",
-                        "value": ""
-                    },
-                    {
-                        "name": "TESTING_OCTO_PROBABILITY",
-                        "value": ""
-                    },
-                    {
-                        "name": "ENABLE_TALK_WHILE_MUTED",
-                        "value": ""
-                    },
-                    {
-                        "name": "XMPP_DOMAIN",
-                        "value": "meet.jitsi"
-                    },
-                    {
-                        "name": "ETHERPAD_PUBLIC_URL",
-                        "value": ""
-                    },
-                    {
-                        "name": "RESOLUTION_WIDTH_MIN",
-                        "value": ""
-                    },
-                    {
-                        "name": "DISABLE_AUDIO_LEVELS",
-                        "value": ""
-                    },
-                    {
-                        "name": "DROPBOX_APPKEY",
-                        "value": ""
-                    },
-                    {
-                        "name": "DEPLOYMENTINFO_USERREGION",
-                        "value": ""
-                    },
-                    {
-                        "name": "ENABLE_HTTP_REDIRECT",
-                        "value": ""
-                    },
-                    {
-                        "name": "DIALIN_NUMBERS_URL",
-                        "value": ""
-                    },
-                    {
-                        "name": "ENABLE_STEREO",
-                        "value": ""
-                    },
-                    {
-                        "name": "LETSENCRYPT_EMAIL",
-                        "value": ""
-                    },
-                    {
-                        "name": "ENABLE_AUDIO_PROCESSING",
-                        "value": ""
-                    },
-                    {
-                        "name": "ENABLE_SIMULCAST",
-                        "value": ""
-                    },
-                    {
-                        "name": "GOOGLE_ANALYTICS_ID",
-                        "value": ""
-                    },
-                    {
-                        "name": "PUBLIC_URL",
-                        "value": "https://jitsi.virtual.software.testingmachine.eu"
-                    },
-                    {
-                        "name": "LETSENCRYPT_DOMAIN",
-                        "value": ""
-                    },
-                    {
-                        "name": "START_AUDIO_MUTED",
-                        "value": ""
-                    },
-                    {
-                        "name": "JICOFO_AUTH_USER",
-                        "value": "focus"
-                    },
-                    {
-                        "name": "RESOLUTION_WIDTH",
-                        "value": ""
-                    },
-                    {
-                        "name": "ENABLE_REQUIRE_DISPLAY_NAME",
-                        "value": ""
-                    },
-                    {
-                        "name": "XMPP_RECORDER_DOMAIN",
-                        "value": "recorder.meet.jitsi"
-                    },
-                    {
-                        "name": "DEPLOYMENTINFO_ENVIRONMENT",
-                        "value": ""
-                    },
-                    {
-                        "name": "GOOGLE_API_APP_CLIENT_ID",
-                        "value": ""
-                    },
-                    {
-                        "name": "LETSENCRYPT_USE_STAGING",
-                        "value": ""
-                    },
-                    {
-                        "name": "XMPP_BOSH_URL_BASE",
-                        "value": "http://xmpp.meet.jitsi:5280"
-                    }
-                ],
-                "mountPoints": [
-                    {
-                        "sourceVolume": "jitsi-images",
-                        "containerPath": "/usr/share/jitsi-meet/images/"
-                    }
-                ],
-                "volumesFrom": [],
-                "linuxParameters": {
-                    "capabilities": {}
-                },
-                "privileged": false,
-                "readonlyRootFilesystem": false,
-                "dnsServers": [],
-                "dnsSearchDomains": [],
-                "dockerSecurityOptions": [],
-                "pseudoTerminal": false
+                "containerPort": 80,
+                "hostPort": 8000,
+                "protocol": "tcp"
             },
             {
-                "name": "prosody",
-                "image": "jitsi/prosody:stable-6433",
-                "cpu": 0,
-                "memory": 256,
-                "links": [],
-                "portMappings": [],
-                "essential": true,
-                "entryPoint": [],
-                "command": [],
-                "environment": [
-                    {
-                        "name": "XMPP_INTERNAL_MUC_DOMAIN",
-                        "value": "internal-muc.meet.jitsi"
-                    },
-                    {
-                        "name": "ENABLE_XMPP_WEBSOCKET",
-                        "value": "0"
-                    },
-                    {
-                        "name": "TZ",
-                        "value": "UTC"
-                    },
-                    {
-                        "name": "ENABLE_AUTH",
-                        "value": ""
-                    },
-                    {
-                        "name": "JWT_ACCEPTED_AUDIENCES",
-                        "value": ""
-                    },
-                    {
-                        "name": "LDAP_AUTH_METHOD",
-                        "value": ""
-                    },
-                    {
-                        "name": "ENABLE_GUESTS",
-                        "value": ""
-                    },
-                    {
-                        "name": "JIGASI_XMPP_PASSWORD",
-                        "value": "a5a1dc195cd64ef76aa38e5cc8a51263"
-                    },
-                    {
-                        "name": "JWT_TOKEN_AUTH_MODULE",
-                        "value": ""
-                    },
-                    {
-                        "name": "LDAP_TLS_CIPHERS",
-                        "value": ""
-                    },
-                    {
-                        "name": "JICOFO_COMPONENT_SECRET",
-                        "value": ""
-                    },
-                    {
-                        "name": "XMPP_MUC_DOMAIN",
-                        "value": "muc.meet.jitsi"
-                    },
-                    {
-                        "name": "LDAP_BASE",
-                        "value": ""
-                    },
-                    {
-                        "name": "JIBRI_XMPP_USER",
-                        "value": "jibri"
-                    },
-                    {
-                        "name": "ENABLE_AV_MODERATION",
-                        "value": ""
-                    },
-                    {
-                        "name": "LOG_LEVEL",
-                        "value": ""
-                    },
-                    {
-                        "name": "AUTH_TYPE",
-                        "value": ""
-                    },
-                    {
-                        "name": "JWT_AUTH_TYPE",
-                        "value": ""
-                    },
-                    {
-                        "name": "JIBRI_RECORDER_PASSWORD",
-                        "value": "cd3eeecf6b83ce7ed2837beaf9d852e9"
-                    },
-                    {
-                        "name": "LDAP_FILTER",
-                        "value": ""
-                    },
-                    {
-                        "name": "JICOFO_AUTH_PASSWORD",
-                        "value": "965bb8c85f16a3d3aeac50488173ec94"
-                    },
-                    {
-                        "name": "XMPP_INTERNAL_MUC_MODULES",
-                        "value": ""
-                    },
-                    {
-                        "name": "TURNS_PORT",
-                        "value": ""
-                    },
-                    {
-                        "name": "JIBRI_RECORDER_USER",
-                        "value": "recorder"
-                    },
-                    {
-                        "name": "LDAP_TLS_CHECK_PEER",
-                        "value": ""
-                    },
-                    {
-                        "name": "XMPP_AUTH_DOMAIN",
-                        "value": "auth.meet.jitsi"
-                    },
-                    {
-                        "name": "JWT_ACCEPTED_ISSUERS",
-                        "value": ""
-                    },
-                    {
-                        "name": "XMPP_GUEST_DOMAIN",
-                        "value": "guest.meet.jitsi"
-                    },
-                    {
-                        "name": "TURN_CREDENTIALS",
-                        "value": ""
-                    },
-                    {
-                        "name": "LDAP_BINDDN",
-                        "value": ""
-                    },
-                    {
-                        "name": "LDAP_BINDPW",
-                        "value": ""
-                    },
-                    {
-                        "name": "LDAP_TLS_CACERT_FILE",
-                        "value": ""
-                    },
-                    {
-                        "name": "LDAP_TLS_CACERT_DIR",
-                        "value": ""
-                    },
-                    {
-                        "name": "TURNS_HOST",
-                        "value": ""
-                    },
-                    {
-                        "name": "TURN_HOST",
-                        "value": ""
-                    },
-                    {
-                        "name": "JVB_AUTH_PASSWORD",
-                        "value": "75979a2a05df37f83c346ce4431d5de8"
-                    },
-                    {
-                        "name": "LDAP_URL",
-                        "value": ""
-                    },
-                    {
-                        "name": "JVB_AUTH_USER",
-                        "value": "jvb"
-                    },
-                    {
-                        "name": "LDAP_USE_TLS",
-                        "value": ""
-                    },
-                    {
-                        "name": "ENABLE_LOBBY",
-                        "value": "1"
-                    },
-                    {
-                        "name": "GLOBAL_CONFIG",
-                        "value": ""
-                    },
-                    {
-                        "name": "JWT_ALLOW_EMPTY",
-                        "value": ""
-                    },
-                    {
-                        "name": "XMPP_MUC_MODULES",
-                        "value": ""
-                    },
-                    {
-                        "name": "JWT_ASAP_KEYSERVER",
-                        "value": ""
-                    },
-                    {
-                        "name": "XMPP_CROSS_DOMAIN",
-                        "value": ""
-                    },
-                    {
-                        "name": "GLOBAL_MODULES",
-                        "value": ""
-                    },
-                    {
-                        "name": "XMPP_DOMAIN",
-                        "value": "meet.jitsi"
-                    },
-                    {
-                        "name": "JIGASI_XMPP_USER",
-                        "value": "jigasi"
-                    },
-                    {
-                        "name": "XMPP_MODULES",
-                        "value": ""
-                    },
-                    {
-                        "name": "TURN_PORT",
-                        "value": ""
-                    },
-                    {
-                        "name": "LDAP_VERSION",
-                        "value": ""
-                    },
-                    {
-                        "name": "JIBRI_XMPP_PASSWORD",
-                        "value": "ae13796506ede9435c558b1800d7ce3c"
-                    },
-                    {
-                        "name": "JWT_APP_ID",
-                        "value": ""
-                    },
-                    {
-                        "name": "JWT_APP_SECRET",
-                        "value": ""
-                    },
-                    {
-                        "name": "PUBLIC_URL",
-                        "value": "https://jitsi.virtual.software.testingmachine.eu"
-                    },
-                    {
-                        "name": "JICOFO_AUTH_USER",
-                        "value": "focus"
-                    },
-                    {
-                        "name": "LDAP_START_TLS",
-                        "value": ""
-                    },
-                    {
-                        "name": "XMPP_RECORDER_DOMAIN",
-                        "value": "recorder.meet.jitsi"
-                    }
-                ],
-                "mountPoints": [
-                    {
-                        "sourceVolume": "jitsi-data",
-                        "containerPath": "/config"
-                    }
-                ],
-                "volumesFrom": [],
-                "linuxParameters": {
-                    "capabilities": {}
-                },
-                "hostname": "xmpp.meet.jitsi",
-                "privileged": false,
-                "readonlyRootFilesystem": false,
-                "dnsServers": [],
-                "dnsSearchDomains": [],
-                "dockerSecurityOptions": [],
-                "pseudoTerminal": false
-            },
-            {
-                "name": "jicofo",
-                "image": "jitsi/jicofo:stable-6433",
-                "cpu": 0,
-                "memory": 256,
-                "links": [
-                    "prosody:xmpp.meet.jitsi"
-                ],
-                "portMappings": [],
-                "essential": true,
-                "entryPoint": [],
-                "command": [],
-                "environment": [
-                    {
-                        "name": "XMPP_INTERNAL_MUC_DOMAIN",
-                        "value": "internal-muc.meet.jitsi"
-                    },
-                    {
-                        "name": "BRIDGE_STRESS_THRESHOLD",
-                        "value": ""
-                    },
-                    {
-                        "name": "TZ",
-                        "value": "UTC"
-                    },
-                    {
-                        "name": "ENABLE_AUTH",
-                        "value": ""
-                    },
-                    {
-                        "name": "JIGASI_SIP_URI",
-                        "value": ""
-                    },
-                    {
-                        "name": "ENABLE_AUTO_OWNER",
-                        "value": ""
-                    },
-                    {
-                        "name": "JICOFO_SHORT_ID",
-                        "value": ""
-                    },
-                    {
-                        "name": "XMPP_MUC_DOMAIN",
-                        "value": "muc.meet.jitsi"
-                    },
-                    {
-                        "name": "JIBRI_BREWERY_MUC",
-                        "value": "jibribrewery"
-                    },
-                    {
-                        "name": "JICOFO_CONF_SINGLE_PARTICIPANT_TIMEOUT",
-                        "value": ""
-                    },
-                    {
-                        "name": "AUTH_TYPE",
-                        "value": ""
-                    },
-                    {
-                        "name": "ENABLE_RECORDING",
-                        "value": "0"
-                    },
-                    {
-                        "name": "ENABLE_OCTO",
-                        "value": ""
-                    },
-                    {
-                        "name": "JICOFO_AUTH_PASSWORD",
-                        "value": "965bb8c85f16a3d3aeac50488173ec94"
-                    },
-                    {
-                        "name": "MAX_BRIDGE_PARTICIPANTS",
-                        "value": ""
-                    },
-                    {
-                        "name": "ENABLE_SCTP",
-                        "value": ""
-                    },
-                    {
-                        "name": "JIBRI_REQUEST_RETRIES",
-                        "value": ""
-                    },
-                    {
-                        "name": "ENABLE_CODEC_H264",
-                        "value": ""
-                    },
-                    {
-                        "name": "XMPP_DOMAIN",
-                        "value": "meet.jitsi"
-                    },
-                    {
-                        "name": "BRIDGE_AVG_PARTICIPANT_STRESS",
-                        "value": ""
-                    },
-                    {
-                        "name": "JICOFO_ENABLE_HEALTH_CHECKS",
-                        "value": ""
-                    },
-                    {
-                        "name": "JICOFO_RESERVATION_ENABLED",
-                        "value": ""
-                    },
-                    {
-                        "name": "JIGASI_BREWERY_MUC",
-                        "value": "jigasibrewery"
-                    },
-                    {
-                        "name": "JICOFO_ENABLE_BRIDGE_HEALTH_CHECKS",
-                        "value": ""
-                    },
-                    {
-                        "name": "OCTO_BRIDGE_SELECTION_STRATEGY",
-                        "value": ""
-                    },
-                    {
-                        "name": "JIBRI_PENDING_TIMEOUT",
-                        "value": "90"
-                    },
-                    {
-                        "name": "ENABLE_CODEC_VP8",
-                        "value": ""
-                    },
-                    {
-                        "name": "JICOFO_CONF_INITIAL_PARTICIPANT_WAIT_TIMEOUT",
-                        "value": ""
-                    },
-                    {
-                        "name": "XMPP_AUTH_DOMAIN",
-                        "value": "auth.meet.jitsi"
-                    },
-                    {
-                        "name": "ENABLE_CODEC_VP9",
-                        "value": ""
-                    },
-                    {
-                        "name": "XMPP_SERVER",
-                        "value": "xmpp.meet.jitsi"
-                    },
-                    {
-                        "name": "JICOFO_RESERVATION_REST_BASE_URL",
-                        "value": ""
-                    },
-                    {
-                        "name": "JVB_BREWERY_MUC",
-                        "value": "jvbbrewery"
-                    },
-                    {
-                        "name": "JICOFO_AUTH_USER",
-                        "value": "focus"
-                    }
-                ],
-                "mountPoints": [],
-                "volumesFrom": [],
-                "linuxParameters": {
-                    "capabilities": {}
-                },
-                "privileged": false,
-                "readonlyRootFilesystem": false,
-                "dnsServers": [],
-                "dnsSearchDomains": [],
-                "dockerSecurityOptions": [],
-                "pseudoTerminal": false
-            },
-            {
-                "name": "jvb",
-                "image": "jitsi/jvb:stable-6433",
-                "cpu": 0,
-                "memoryReservation": 1024,
-                "links": [
-                    "prosody:xmpp.meet.jitsi"
-                ],
-                "portMappings": [
-                    {
-                        "containerPort": 10000,
-                        "hostPort": 10000,
-                        "protocol": "udp"
-                    },
-                    {
-                        "containerPort": 4443,
-                        "hostPort": 4443,
-                        "protocol": "tcp"
-                    }
-                ],
-                "essential": true,
-                "entryPoint": [],
-                "command": [],
-                "environment": [
-                    {
-                        "name": "JVB_WS_DOMAIN",
-                        "value": ""
-                    },
-                    {
-                        "name": "ENABLE_OCTO",
-                        "value": ""
-                    },
-                    {
-                        "name": "XMPP_INTERNAL_MUC_DOMAIN",
-                        "value": "internal-muc.meet.jitsi"
-                    },
-                    {
-                        "name": "JVB_TCP_PORT",
-                        "value": "4443"
-                    },
-                    {
-                        "name": "JVB_PORT",
-                        "value": "10000"
-                    },
-                    {
-                        "name": "TZ",
-                        "value": "UTC"
-                    },
-                    {
-                        "name": "JVB_AUTH_PASSWORD",
-                        "value": "75979a2a05df37f83c346ce4431d5de8"
-                    },
-                    {
-                        "name": "JVB_OCTO_BIND_ADDRESS",
-                        "value": ""
-                    },
-                    {
-                        "name": "JVB_AUTH_USER",
-                        "value": "jvb"
-                    },
-                    {
-                        "name": "JVB_ENABLE_APIS",
-                        "value": ""
-                    },
-                    {
-                        "name": "ENABLE_COLIBRI_WEBSOCKET",
-                        "value": "0"
-                    },
-                    {
-                        "name": "JVB_OCTO_REGION",
-                        "value": ""
-                    },
-                    {
-                        "name": "JVB_OCTO_BIND_PORT",
-                        "value": ""
-                    },
-                    {
-                        "name": "XMPP_AUTH_DOMAIN",
-                        "value": "auth.meet.jitsi"
-                    },
-                    {
-                        "name": "XMPP_SERVER",
-                        "value": "xmpp.meet.jitsi"
-                    },
-                    {
-                        "name": "PUBLIC_URL",
-                        "value": "https://jitsi.virtual.software.testingmachine.eu"
-                    },
-                    {
-                        "name": "JVB_BREWERY_MUC",
-                        "value": "jvbbrewery"
-                    },
-                    {
-                        "name": "JVB_TCP_MAPPED_PORT",
-                        "value": "4443"
-                    },
-                    {
-                        "name": "DOCKER_HOST_ADDRESS",
-                        "value": ""
-                    },
-                    {
-                        "name": "JVB_WS_SERVER_ID",
-                        "value": ""
-                    },
-                    {
-                        "name": "JVB_OCTO_PUBLIC_ADDRESS",
-                        "value": ""
-                    },
-                    {
-                        "name": "JVB_TCP_HARVESTER_DISABLED",
-                        "value": "true"
-                    },
-                    {
-                        "name": "JVB_STUN_SERVERS",
-                        "value": "meet-jit-si-turnrelay.jitsi.net:443"
-                    }
-                ],
-                "mountPoints": [],
-                "volumesFrom": [],
-                "linuxParameters": {
-                    "capabilities": {}
-                },
-                "privileged": false,
-                "readonlyRootFilesystem": false,
-                "dnsServers": [],
-                "dnsSearchDomains": [],
-                "dockerSecurityOptions": [],
-                "pseudoTerminal": false
+                "containerPort": 443,
+                "hostPort": 8443,
+                "protocol": "tcp"
             }
         ],
-        "family": "jitsi-meet-task-staging",
-        "revision": 15,
-        "volumes": [
+        "essential": true,
+        "entryPoint": [],
+        "command": [],
+        "environment": [
             {
-                "name": "jitsi-data",
-                "efsVolumeConfiguration": {
-                    "fileSystemId": "fs-bce67e88",
-                    "rootDirectory": "/prosody/config",
-                    "transitEncryption": "DISABLED",
-                    "authorizationConfig": {
-                        "iam": "DISABLED"
-                    }
-                }
+                "name": "ENABLE_PREJOIN_PAGE",
+                "value": ""
             },
             {
-                "name": "jitsi-images",
-                "efsVolumeConfiguration": {
-                    "fileSystemId": "fs-bce67e88",
-                    "rootDirectory": "/jitsi/jitsi-meet/images",
-                    "transitEncryption": "DISABLED",
-                    "authorizationConfig": {
-                        "iam": "DISABLED"
-                    }
-                }
+                "name": "CONFCODE_URL",
+                "value": ""
+            },
+            {
+                "name": "ENABLE_FILE_RECORDING_SERVICE_SHARING",
+                "value": ""
+            },
+            {
+                "name": "ENABLE_XMPP_WEBSOCKET",
+                "value": "0"
+            },
+            {
+                "name": "TZ",
+                "value": "UTC"
+            },
+            {
+                "name": "ENABLE_AUTH",
+                "value": ""
+            },
+            {
+                "name": "ENABLE_SUBDOMAINS",
+                "value": ""
+            },
+            {
+                "name": "INVITE_SERVICE_URL",
+                "value": ""
+            },
+            {
+                "name": "ENABLE_STATS_ID",
+                "value": ""
+            },
+            {
+                "name": "START_AUDIO_ONLY",
+                "value": ""
+            },
+            {
+                "name": "ENABLE_GUESTS",
+                "value": ""
+            },
+            {
+                "name": "DESKTOP_SHARING_FRAMERATE_MIN",
+                "value": ""
+            },
+            {
+                "name": "CALLSTATS_SECRET",
+                "value": ""
+            },
+            {
+                "name": "CHROME_EXTENSION_BANNER_JSON",
+                "value": ""
+            },
+            {
+                "name": "DEFAULT_LANGUAGE",
+                "value": ""
+            },
+            {
+                "name": "CONFIG_EXTERNAL_CONNECT",
+                "value": ""
+            },
+            {
+                "name": "DISABLE_HTTPS",
+                "value": ""
+            },
+            {
+                "name": "ENABLE_WELCOME_PAGE",
+                "value": ""
+            },
+            {
+                "name": "TESTING_CAP_SCREENSHARE_BITRATE",
+                "value": ""
+            },
+            {
+                "name": "ENABLE_CALENDAR",
+                "value": ""
+            },
+            {
+                "name": "NGINX_RESOLVER",
+                "value": ""
+            },
+            {
+                "name": "XMPP_MUC_DOMAIN",
+                "value": "muc.meet.jitsi"
+            },
+            {
+                "name": "TOKEN_AUTH_URL",
+                "value": ""
+            },
+            {
+                "name": "ANALYTICS_WHITELISTED_EVENTS",
+                "value": ""
+            },
+            {
+                "name": "ENABLE_RECORDING",
+                "value": "0"
+            },
+            {
+                "name": "AMPLITUDE_ID",
+                "value": ""
+            },
+            {
+                "name": "START_SILENT",
+                "value": ""
+            },
+            {
+                "name": "ENABLE_IPV6",
+                "value": ""
+            },
+            {
+                "name": "ENABLE_P2P",
+                "value": ""
+            },
+            {
+                "name": "START_VIDEO_MUTED",
+                "value": ""
+            },
+            {
+                "name": "RESOLUTION",
+                "value": ""
+            },
+            {
+                "name": "ANALYTICS_SCRIPT_URLS",
+                "value": ""
+            },
+            {
+                "name": "ENABLE_COLIBRI_WEBSOCKET",
+                "value": "0"
+            },
+            {
+                "name": "ENABLE_TCC",
+                "value": ""
+            },
+            {
+                "name": "ENABLE_NO_AUDIO_DETECTION",
+                "value": ""
+            },
+            {
+                "name": "ENABLE_REMB",
+                "value": ""
+            },
+            {
+                "name": "ENABLE_FLOC",
+                "value": ""
+            },
+            {
+                "name": "START_WITH_VIDEO_MUTED",
+                "value": ""
+            },
+            {
+                "name": "XMPP_AUTH_DOMAIN",
+                "value": "auth.meet.jitsi"
+            },
+            {
+                "name": "DYNAMIC_BRANDING_URL",
+                "value": ""
+            },
+            {
+                "name": "DESKTOP_SHARING_FRAMERATE_MAX",
+                "value": ""
+            },
+            {
+                "name": "ENABLE_LETSENCRYPT",
+                "value": ""
+            },
+            {
+                "name": "XMPP_GUEST_DOMAIN",
+                "value": "guest.meet.jitsi"
+            },
+            {
+                "name": "NGINX_WORKER_PROCESSES",
+                "value": ""
+            },
+            {
+                "name": "ENABLE_TRANSCRIPTIONS",
+                "value": ""
+            },
+            {
+                "name": "DEPLOYMENTINFO_REGION",
+                "value": ""
+            },
+            {
+                "name": "ENABLE_NOISY_MIC_DETECTION",
+                "value": ""
+            },
+            {
+                "name": "MICROSOFT_API_APP_CLIENT_ID",
+                "value": ""
+            },
+            {
+                "name": "RESOLUTION_MIN",
+                "value": ""
+            },
+            {
+                "name": "START_BITRATE",
+                "value": ""
+            },
+            {
+                "name": "MATOMO_ENDPOINT",
+                "value": ""
+            },
+            {
+                "name": "NGINX_WORKER_CONNECTIONS",
+                "value": ""
+            },
+            {
+                "name": "DIALOUT_AUTH_URL",
+                "value": ""
+            },
+            {
+                "name": "DIALOUT_CODES_URL",
+                "value": ""
+            },
+            {
+                "name": "MATOMO_SITE_ID",
+                "value": ""
+            },
+            {
+                "name": "CALLSTATS_ID",
+                "value": ""
+            },
+            {
+                "name": "DROPBOX_REDIRECT_URI",
+                "value": ""
+            },
+            {
+                "name": "START_WITH_AUDIO_MUTED",
+                "value": ""
+            },
+            {
+                "name": "DEPLOYMENTINFO_ENVIRONMENT_TYPE",
+                "value": ""
+            },
+            {
+                "name": "DEPLOYMENTINFO_SHARD",
+                "value": ""
+            },
+            {
+                "name": "ETHERPAD_URL_BASE",
+                "value": ""
+            },
+            {
+                "name": "CALLSTATS_CUSTOM_SCRIPT_URL",
+                "value": ""
+            },
+            {
+                "name": "ENABLE_FILE_RECORDING_SERVICE",
+                "value": ""
+            },
+            {
+                "name": "ENABLE_CLOSE_PAGE",
+                "value": ""
+            },
+            {
+                "name": "DISABLE_DEEP_LINKING",
+                "value": ""
+            },
+            {
+                "name": "PEOPLE_SEARCH_URL",
+                "value": ""
+            },
+            {
+                "name": "ENABLE_LIPSYNC",
+                "value": ""
+            },
+            {
+                "name": "ENABLE_HSTS",
+                "value": ""
+            },
+            {
+                "name": "TESTING_OCTO_PROBABILITY",
+                "value": ""
+            },
+            {
+                "name": "ENABLE_TALK_WHILE_MUTED",
+                "value": ""
+            },
+            {
+                "name": "XMPP_DOMAIN",
+                "value": "meet.jitsi"
+            },
+            {
+                "name": "ETHERPAD_PUBLIC_URL",
+                "value": ""
+            },
+            {
+                "name": "RESOLUTION_WIDTH_MIN",
+                "value": ""
+            },
+            {
+                "name": "DISABLE_AUDIO_LEVELS",
+                "value": ""
+            },
+            {
+                "name": "DROPBOX_APPKEY",
+                "value": ""
+            },
+            {
+                "name": "DEPLOYMENTINFO_USERREGION",
+                "value": ""
+            },
+            {
+                "name": "ENABLE_HTTP_REDIRECT",
+                "value": ""
+            },
+            {
+                "name": "DIALIN_NUMBERS_URL",
+                "value": ""
+            },
+            {
+                "name": "ENABLE_STEREO",
+                "value": ""
+            },
+            {
+                "name": "LETSENCRYPT_EMAIL",
+                "value": ""
+            },
+            {
+                "name": "ENABLE_AUDIO_PROCESSING",
+                "value": ""
+            },
+            {
+                "name": "ENABLE_SIMULCAST",
+                "value": ""
+            },
+            {
+                "name": "GOOGLE_ANALYTICS_ID",
+                "value": ""
+            },
+            {
+                "name": "PUBLIC_URL",
+                "value": "https://jitsi.virtual.software.testingmachine.eu"
+            },
+            {
+                "name": "LETSENCRYPT_DOMAIN",
+                "value": ""
+            },
+            {
+                "name": "START_AUDIO_MUTED",
+                "value": ""
+            },
+            {
+                "name": "JICOFO_AUTH_USER",
+                "value": "focus"
+            },
+            {
+                "name": "RESOLUTION_WIDTH",
+                "value": ""
+            },
+            {
+                "name": "ENABLE_REQUIRE_DISPLAY_NAME",
+                "value": ""
+            },
+            {
+                "name": "XMPP_RECORDER_DOMAIN",
+                "value": "recorder.meet.jitsi"
+            },
+            {
+                "name": "DEPLOYMENTINFO_ENVIRONMENT",
+                "value": ""
+            },
+            {
+                "name": "GOOGLE_API_APP_CLIENT_ID",
+                "value": ""
+            },
+            {
+                "name": "LETSENCRYPT_USE_STAGING",
+                "value": ""
+            },
+            {
+                "name": "XMPP_BOSH_URL_BASE",
+                "value": "http://xmpp.meet.jitsi:5280"
             }
         ],
-        "status": "ACTIVE",
-        "requiresAttributes": [
+        "mountPoints": [
             {
-                "name": "ecs.capability.efs"
-            },
-            {
-                "name": "com.amazonaws.ecs.capability.docker-remote-api.1.17"
-            },
-            {
-                "name": "com.amazonaws.ecs.capability.docker-remote-api.1.21"
-            },
-            {
-                "name": "com.amazonaws.ecs.capability.docker-remote-api.1.25"
+                "sourceVolume": "jitsi-images",
+                "containerPath": "/usr/share/jitsi-meet/images/"
             }
         ],
-        "placementConstraints": [],
-        "compatibilities": [
-            "EXTERNAL",
-            "EC2"
+        "volumesFrom": [],
+        "linuxParameters": {
+            "capabilities": {}
+        },
+        "privileged": false,
+        "readonlyRootFilesystem": false,
+        "dnsServers": [],
+        "dnsSearchDomains": [],
+        "dockerSecurityOptions": [],
+        "pseudoTerminal": false
+    },
+    {
+        "name": "prosody",
+        "image": "jitsi/prosody:stable-6433",
+        "cpu": 0,
+        "memory": 256,
+        "links": [],
+        "portMappings": [],
+        "essential": true,
+        "entryPoint": [],
+        "command": [],
+        "environment": [
+            {
+                "name": "XMPP_INTERNAL_MUC_DOMAIN",
+                "value": "internal-muc.meet.jitsi"
+            },
+            {
+                "name": "ENABLE_XMPP_WEBSOCKET",
+                "value": "0"
+            },
+            {
+                "name": "TZ",
+                "value": "UTC"
+            },
+            {
+                "name": "ENABLE_AUTH",
+                "value": ""
+            },
+            {
+                "name": "JWT_ACCEPTED_AUDIENCES",
+                "value": ""
+            },
+            {
+                "name": "LDAP_AUTH_METHOD",
+                "value": ""
+            },
+            {
+                "name": "ENABLE_GUESTS",
+                "value": ""
+            },
+            {
+                "name": "JIGASI_XMPP_PASSWORD",
+                "value": "a5a1dc195cd64ef76aa38e5cc8a51263"
+            },
+            {
+                "name": "JWT_TOKEN_AUTH_MODULE",
+                "value": ""
+            },
+            {
+                "name": "LDAP_TLS_CIPHERS",
+                "value": ""
+            },
+            {
+                "name": "JICOFO_COMPONENT_SECRET",
+                "value": ""
+            },
+            {
+                "name": "XMPP_MUC_DOMAIN",
+                "value": "muc.meet.jitsi"
+            },
+            {
+                "name": "LDAP_BASE",
+                "value": ""
+            },
+            {
+                "name": "JIBRI_XMPP_USER",
+                "value": "jibri"
+            },
+            {
+                "name": "ENABLE_AV_MODERATION",
+                "value": ""
+            },
+            {
+                "name": "LOG_LEVEL",
+                "value": ""
+            },
+            {
+                "name": "AUTH_TYPE",
+                "value": ""
+            },
+            {
+                "name": "JWT_AUTH_TYPE",
+                "value": ""
+            },
+            {
+                "name": "JIBRI_RECORDER_PASSWORD",
+                "value": "cd3eeecf6b83ce7ed2837beaf9d852e9"
+            },
+            {
+                "name": "LDAP_FILTER",
+                "value": ""
+            },
+            {
+                "name": "JICOFO_AUTH_PASSWORD",
+                "value": "965bb8c85f16a3d3aeac50488173ec94"
+            },
+            {
+                "name": "XMPP_INTERNAL_MUC_MODULES",
+                "value": ""
+            },
+            {
+                "name": "TURNS_PORT",
+                "value": ""
+            },
+            {
+                "name": "JIBRI_RECORDER_USER",
+                "value": "recorder"
+            },
+            {
+                "name": "LDAP_TLS_CHECK_PEER",
+                "value": ""
+            },
+            {
+                "name": "XMPP_AUTH_DOMAIN",
+                "value": "auth.meet.jitsi"
+            },
+            {
+                "name": "JWT_ACCEPTED_ISSUERS",
+                "value": ""
+            },
+            {
+                "name": "XMPP_GUEST_DOMAIN",
+                "value": "guest.meet.jitsi"
+            },
+            {
+                "name": "TURN_CREDENTIALS",
+                "value": ""
+            },
+            {
+                "name": "LDAP_BINDDN",
+                "value": ""
+            },
+            {
+                "name": "LDAP_BINDPW",
+                "value": ""
+            },
+            {
+                "name": "LDAP_TLS_CACERT_FILE",
+                "value": ""
+            },
+            {
+                "name": "LDAP_TLS_CACERT_DIR",
+                "value": ""
+            },
+            {
+                "name": "TURNS_HOST",
+                "value": ""
+            },
+            {
+                "name": "TURN_HOST",
+                "value": ""
+            },
+            {
+                "name": "JVB_AUTH_PASSWORD",
+                "value": "75979a2a05df37f83c346ce4431d5de8"
+            },
+            {
+                "name": "LDAP_URL",
+                "value": ""
+            },
+            {
+                "name": "JVB_AUTH_USER",
+                "value": "jvb"
+            },
+            {
+                "name": "LDAP_USE_TLS",
+                "value": ""
+            },
+            {
+                "name": "ENABLE_LOBBY",
+                "value": "1"
+            },
+            {
+                "name": "GLOBAL_CONFIG",
+                "value": ""
+            },
+            {
+                "name": "JWT_ALLOW_EMPTY",
+                "value": ""
+            },
+            {
+                "name": "XMPP_MUC_MODULES",
+                "value": ""
+            },
+            {
+                "name": "JWT_ASAP_KEYSERVER",
+                "value": ""
+            },
+            {
+                "name": "XMPP_CROSS_DOMAIN",
+                "value": ""
+            },
+            {
+                "name": "GLOBAL_MODULES",
+                "value": ""
+            },
+            {
+                "name": "XMPP_DOMAIN",
+                "value": "meet.jitsi"
+            },
+            {
+                "name": "JIGASI_XMPP_USER",
+                "value": "jigasi"
+            },
+            {
+                "name": "XMPP_MODULES",
+                "value": ""
+            },
+            {
+                "name": "TURN_PORT",
+                "value": ""
+            },
+            {
+                "name": "LDAP_VERSION",
+                "value": ""
+            },
+            {
+                "name": "JIBRI_XMPP_PASSWORD",
+                "value": "ae13796506ede9435c558b1800d7ce3c"
+            },
+            {
+                "name": "JWT_APP_ID",
+                "value": ""
+            },
+            {
+                "name": "JWT_APP_SECRET",
+                "value": ""
+            },
+            {
+                "name": "PUBLIC_URL",
+                "value": "https://jitsi.virtual.software.testingmachine.eu"
+            },
+            {
+                "name": "JICOFO_AUTH_USER",
+                "value": "focus"
+            },
+            {
+                "name": "LDAP_START_TLS",
+                "value": ""
+            },
+            {
+                "name": "XMPP_RECORDER_DOMAIN",
+                "value": "recorder.meet.jitsi"
+            }
         ],
-        "requiresCompatibilities": [
-            "EC2"
+        "mountPoints": [
+            {
+                "sourceVolume": "jitsi-data",
+                "containerPath": "/config"
+            }
         ],
-        "registeredAt": "2021-11-08T13:36:25.900000+01:00",
-        "registeredBy": "arn:aws:iam::755952719952:user/ebcont"
+        "volumesFrom": [],
+        "linuxParameters": {
+            "capabilities": {}
+        },
+        "hostname": "xmpp.meet.jitsi",
+        "privileged": false,
+        "readonlyRootFilesystem": false,
+        "dnsServers": [],
+        "dnsSearchDomains": [],
+        "dockerSecurityOptions": [],
+        "pseudoTerminal": false
+    },
+    {
+        "name": "jicofo",
+        "image": "jitsi/jicofo:stable-6433",
+        "cpu": 0,
+        "memory": 256,
+        "links": [
+            "prosody:xmpp.meet.jitsi"
+        ],
+        "portMappings": [],
+        "essential": true,
+        "entryPoint": [],
+        "command": [],
+        "environment": [
+            {
+                "name": "XMPP_INTERNAL_MUC_DOMAIN",
+                "value": "internal-muc.meet.jitsi"
+            },
+            {
+                "name": "BRIDGE_STRESS_THRESHOLD",
+                "value": ""
+            },
+            {
+                "name": "TZ",
+                "value": "UTC"
+            },
+            {
+                "name": "ENABLE_AUTH",
+                "value": ""
+            },
+            {
+                "name": "JIGASI_SIP_URI",
+                "value": ""
+            },
+            {
+                "name": "ENABLE_AUTO_OWNER",
+                "value": ""
+            },
+            {
+                "name": "JICOFO_SHORT_ID",
+                "value": ""
+            },
+            {
+                "name": "XMPP_MUC_DOMAIN",
+                "value": "muc.meet.jitsi"
+            },
+            {
+                "name": "JIBRI_BREWERY_MUC",
+                "value": "jibribrewery"
+            },
+            {
+                "name": "JICOFO_CONF_SINGLE_PARTICIPANT_TIMEOUT",
+                "value": ""
+            },
+            {
+                "name": "AUTH_TYPE",
+                "value": ""
+            },
+            {
+                "name": "ENABLE_RECORDING",
+                "value": "0"
+            },
+            {
+                "name": "ENABLE_OCTO",
+                "value": ""
+            },
+            {
+                "name": "JICOFO_AUTH_PASSWORD",
+                "value": "965bb8c85f16a3d3aeac50488173ec94"
+            },
+            {
+                "name": "MAX_BRIDGE_PARTICIPANTS",
+                "value": ""
+            },
+            {
+                "name": "ENABLE_SCTP",
+                "value": ""
+            },
+            {
+                "name": "JIBRI_REQUEST_RETRIES",
+                "value": ""
+            },
+            {
+                "name": "ENABLE_CODEC_H264",
+                "value": ""
+            },
+            {
+                "name": "XMPP_DOMAIN",
+                "value": "meet.jitsi"
+            },
+            {
+                "name": "BRIDGE_AVG_PARTICIPANT_STRESS",
+                "value": ""
+            },
+            {
+                "name": "JICOFO_ENABLE_HEALTH_CHECKS",
+                "value": ""
+            },
+            {
+                "name": "JICOFO_RESERVATION_ENABLED",
+                "value": ""
+            },
+            {
+                "name": "JIGASI_BREWERY_MUC",
+                "value": "jigasibrewery"
+            },
+            {
+                "name": "JICOFO_ENABLE_BRIDGE_HEALTH_CHECKS",
+                "value": ""
+            },
+            {
+                "name": "OCTO_BRIDGE_SELECTION_STRATEGY",
+                "value": ""
+            },
+            {
+                "name": "JIBRI_PENDING_TIMEOUT",
+                "value": "90"
+            },
+            {
+                "name": "ENABLE_CODEC_VP8",
+                "value": ""
+            },
+            {
+                "name": "JICOFO_CONF_INITIAL_PARTICIPANT_WAIT_TIMEOUT",
+                "value": ""
+            },
+            {
+                "name": "XMPP_AUTH_DOMAIN",
+                "value": "auth.meet.jitsi"
+            },
+            {
+                "name": "ENABLE_CODEC_VP9",
+                "value": ""
+            },
+            {
+                "name": "XMPP_SERVER",
+                "value": "xmpp.meet.jitsi"
+            },
+            {
+                "name": "JICOFO_RESERVATION_REST_BASE_URL",
+                "value": ""
+            },
+            {
+                "name": "JVB_BREWERY_MUC",
+                "value": "jvbbrewery"
+            },
+            {
+                "name": "JICOFO_AUTH_USER",
+                "value": "focus"
+            }
+        ],
+        "mountPoints": [],
+        "volumesFrom": [],
+        "linuxParameters": {
+            "capabilities": {}
+        },
+        "privileged": false,
+        "readonlyRootFilesystem": false,
+        "dnsServers": [],
+        "dnsSearchDomains": [],
+        "dockerSecurityOptions": [],
+        "pseudoTerminal": false
+    },
+    {
+        "name": "jvb",
+        "image": "jitsi/jvb:stable-6433",
+        "cpu": 0,
+        "memoryReservation": 1024,
+        "links": [
+            "prosody:xmpp.meet.jitsi"
+        ],
+        "portMappings": [
+            {
+                "containerPort": 10000,
+                "hostPort": 10000,
+                "protocol": "udp"
+            },
+            {
+                "containerPort": 4443,
+                "hostPort": 4443,
+                "protocol": "tcp"
+            }
+        ],
+        "essential": true,
+        "entryPoint": [],
+        "command": [],
+        "environment": [
+            {
+                "name": "JVB_WS_DOMAIN",
+                "value": ""
+            },
+            {
+                "name": "ENABLE_OCTO",
+                "value": ""
+            },
+            {
+                "name": "XMPP_INTERNAL_MUC_DOMAIN",
+                "value": "internal-muc.meet.jitsi"
+            },
+            {
+                "name": "JVB_TCP_PORT",
+                "value": "4443"
+            },
+            {
+                "name": "JVB_PORT",
+                "value": "10000"
+            },
+            {
+                "name": "TZ",
+                "value": "UTC"
+            },
+            {
+                "name": "JVB_AUTH_PASSWORD",
+                "value": "75979a2a05df37f83c346ce4431d5de8"
+            },
+            {
+                "name": "JVB_OCTO_BIND_ADDRESS",
+                "value": ""
+            },
+            {
+                "name": "JVB_AUTH_USER",
+                "value": "jvb"
+            },
+            {
+                "name": "JVB_ENABLE_APIS",
+                "value": ""
+            },
+            {
+                "name": "ENABLE_COLIBRI_WEBSOCKET",
+                "value": "0"
+            },
+            {
+                "name": "JVB_OCTO_REGION",
+                "value": ""
+            },
+            {
+                "name": "JVB_OCTO_BIND_PORT",
+                "value": ""
+            },
+            {
+                "name": "XMPP_AUTH_DOMAIN",
+                "value": "auth.meet.jitsi"
+            },
+            {
+                "name": "XMPP_SERVER",
+                "value": "xmpp.meet.jitsi"
+            },
+            {
+                "name": "PUBLIC_URL",
+                "value": "https://jitsi.virtual.software.testingmachine.eu"
+            },
+            {
+                "name": "JVB_BREWERY_MUC",
+                "value": "jvbbrewery"
+            },
+            {
+                "name": "JVB_TCP_MAPPED_PORT",
+                "value": "4443"
+            },
+            {
+                "name": "DOCKER_HOST_ADDRESS",
+                "value": ""
+            },
+            {
+                "name": "JVB_WS_SERVER_ID",
+                "value": ""
+            },
+            {
+                "name": "JVB_OCTO_PUBLIC_ADDRESS",
+                "value": ""
+            },
+            {
+                "name": "JVB_TCP_HARVESTER_DISABLED",
+                "value": "true"
+            },
+            {
+                "name": "JVB_STUN_SERVERS",
+                "value": "meet-jit-si-turnrelay.jitsi.net:443"
+            }
+        ],
+        "mountPoints": [],
+        "volumesFrom": [],
+        "linuxParameters": {
+            "capabilities": {}
+        },
+        "privileged": false,
+        "readonlyRootFilesystem": false,
+        "dnsServers": [],
+        "dnsSearchDomains": [],
+        "dockerSecurityOptions": [],
+        "pseudoTerminal": false
     }
-}
+]

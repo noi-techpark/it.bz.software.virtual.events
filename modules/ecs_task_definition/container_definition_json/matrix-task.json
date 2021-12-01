@@ -1,260 +1,187 @@
-{
-    "taskDefinition": {
-        "taskDefinitionArn": "arn:aws:ecs:eu-west-1:755952719952:task-definition/matrix-task:17",
-        "containerDefinitions": [
+[
+    {
+        "name": "synapse",
+        "image": "matrixdotorg/synapse:latest",
+        "cpu": 0,
+        "memory": 256,
+        "links": [
+            "postgres:postgres",
+            "redis:redis"
+        ],
+        "portMappings": [
             {
-                "name": "synapse",
-                "image": "matrixdotorg/synapse:latest",
-                "cpu": 0,
-                "memory": 256,
-                "links": [
-                    "postgres:postgres",
-                    "redis:redis"
-                ],
-                "portMappings": [
-                    {
-                        "containerPort": 8008,
-                        "hostPort": 8008,
-                        "protocol": "tcp"
-                    }
-                ],
-                "essential": true,
-                "entryPoint": [],
-                "command": [],
-                "environment": [
-                    {
-                        "name": "SYNAPSE_CONFIG_PATH",
-                        "value": "/data/homeserver.yaml"
-                    },
-                    {
-                        "name": "TZ",
-                        "value": "Europe/London"
-                    },
-                    {
-                        "name": "SYNAPSE_CONFIG_DIR",
-                        "value": "/data"
-                    }
-                ],
-                "mountPoints": [
-                    {
-                        "sourceVolume": "matrix-synapse-data",
-                        "containerPath": "/data"
-                    }
-                ],
-                "volumesFrom": [],
-                "linuxParameters": {
-                    "capabilities": {}
-                },
-                "dependsOn": [
-                    {
-                        "containerName": "postgres",
-                        "condition": "START"
-                    }
-                ],
-                "privileged": false,
-                "readonlyRootFilesystem": false,
-                "dnsServers": [],
-                "dnsSearchDomains": [],
-                "dockerSecurityOptions": [],
-                "pseudoTerminal": false
-            },
-            {
-                "name": "element",
-                "image": "vectorim/element-web:latest",
-                "cpu": 0,
-                "memory": 256,
-                "links": [
-                    "postgres:postgres",
-                    "redis:redis"
-                ],
-                "portMappings": [
-                    {
-                        "containerPort": 80,
-                        "hostPort": 8080,
-                        "protocol": "tcp"
-                    }
-                ],
-                "essential": true,
-                "entryPoint": [],
-                "command": [],
-                "environment": [],
-                "mountPoints": [
-                    {
-                        "sourceVolume": "matrix-element-data",
-                        "containerPath": "/app"
-                    }
-                ],
-                "volumesFrom": [],
-                "linuxParameters": {
-                    "capabilities": {}
-                },
-                "privileged": false,
-                "readonlyRootFilesystem": false,
-                "dnsServers": [],
-                "dnsSearchDomains": [],
-                "dockerSecurityOptions": [],
-                "pseudoTerminal": false
-            },
-            {
-                "name": "postgres",
-                "image": "postgres:9.6",
-                "cpu": 0,
-                "memory": 256,
-                "links": [],
-                "portMappings": [
-                    {
-                        "containerPort": 5432,
-                        "hostPort": 5432,
-                        "protocol": "tcp"
-                    }
-                ],
-                "essential": true,
-                "entryPoint": [],
-                "command": [],
-                "environment": [
-                    {
-                        "name": "POSTGRES_USER",
-                        "value": "synapse"
-                    },
-                    {
-                        "name": "POSTGRES_PASSWORD",
-                        "value": "Gly4y8pChg"
-                    },
-                    {
-                        "name": "POSTGRES_INITDB_ARGS",
-                        "value": "--encoding='UTF8' --lc-collate='C' --lc-ctype='C'"
-                    },
-                    {
-                        "name": "POSTGRES_DB",
-                        "value": "synapse"
-                    }
-                ],
-                "mountPoints": [
-                    {
-                        "sourceVolume": "matrix-postres-data",
-                        "containerPath": "/var/lib/postgresql/data"
-                    }
-                ],
-                "volumesFrom": [],
-                "linuxParameters": {
-                    "capabilities": {}
-                },
-                "hostname": "postgres",
-                "privileged": false,
-                "readonlyRootFilesystem": false,
-                "dnsServers": [],
-                "dnsSearchDomains": [],
-                "dockerSecurityOptions": [],
-                "pseudoTerminal": false,
-                "healthCheck": {
-                    "command": [
-                        "CMD-SHELL",
-                        "pg_isready"
-                    ],
-                    "interval": 10,
-                    "timeout": 5,
-                    "retries": 5,
-                    "startPeriod": 5
-                }
-            },
-            {
-                "name": "redis",
-                "image": "redis:latest",
-                "cpu": 0,
-                "memory": 256,
-                "links": [],
-                "portMappings": [
-                    {
-                        "containerPort": 6379,
-                        "hostPort": 6379,
-                        "protocol": "tcp"
-                    }
-                ],
-                "essential": true,
-                "entryPoint": [],
-                "command": [],
-                "environment": [],
-                "mountPoints": [],
-                "volumesFrom": [],
-                "linuxParameters": {
-                    "capabilities": {}
-                },
-                "hostname": "redis",
-                "privileged": false,
-                "readonlyRootFilesystem": false,
-                "dnsServers": [],
-                "dnsSearchDomains": [],
-                "dockerSecurityOptions": [],
-                "pseudoTerminal": false
+                "containerPort": 8008,
+                "hostPort": 8008,
+                "protocol": "tcp"
             }
         ],
-        "family": "matrix-task",
-        "revision": 17,
-        "volumes": [
+        "essential": true,
+        "entryPoint": [],
+        "command": [],
+        "environment": [
             {
-                "name": "matrix-synapse-data",
-                "efsVolumeConfiguration": {
-                    "fileSystemId": "fs-b61d8482",
-                    "rootDirectory": "/matrix/synapse",
-                    "transitEncryption": "DISABLED",
-                    "authorizationConfig": {
-                        "iam": "DISABLED"
-                    }
-                }
+                "name": "SYNAPSE_CONFIG_PATH",
+                "value": "/data/homeserver.yaml"
             },
             {
-                "name": "matrix-postres-data",
-                "efsVolumeConfiguration": {
-                    "fileSystemId": "fs-b61d8482",
-                    "rootDirectory": "/matrix/postgres/data",
-                    "transitEncryption": "DISABLED",
-                    "authorizationConfig": {
-                        "iam": "DISABLED"
-                    }
-                }
+                "name": "TZ",
+                "value": "Europe/London"
             },
             {
-                "name": "matrix-element-data",
-                "efsVolumeConfiguration": {
-                    "fileSystemId": "fs-b61d8482",
-                    "rootDirectory": "/matrix/element",
-                    "transitEncryption": "DISABLED",
-                    "authorizationConfig": {
-                        "iam": "DISABLED"
-                    }
-                }
+                "name": "SYNAPSE_CONFIG_DIR",
+                "value": "/data"
             }
         ],
-        "status": "ACTIVE",
-        "requiresAttributes": [
+        "mountPoints": [
             {
-                "name": "ecs.capability.efs"
-            },
-            {
-                "name": "com.amazonaws.ecs.capability.docker-remote-api.1.17"
-            },
-            {
-                "name": "ecs.capability.container-ordering"
-            },
-            {
-                "name": "ecs.capability.container-health-check"
-            },
-            {
-                "name": "com.amazonaws.ecs.capability.docker-remote-api.1.25"
-            },
-            {
-                "name": "com.amazonaws.ecs.capability.docker-remote-api.1.29"
+                "sourceVolume": "matrix-synapse-data",
+                "containerPath": "/data"
             }
         ],
-        "placementConstraints": [],
-        "compatibilities": [
-            "EXTERNAL",
-            "EC2"
+        "volumesFrom": [],
+        "linuxParameters": {
+            "capabilities": {}
+        },
+        "dependsOn": [
+            {
+                "containerName": "postgres",
+                "condition": "START"
+            }
         ],
-        "requiresCompatibilities": [
-            "EC2"
+        "privileged": false,
+        "readonlyRootFilesystem": false,
+        "dnsServers": [],
+        "dnsSearchDomains": [],
+        "dockerSecurityOptions": [],
+        "pseudoTerminal": false
+    },
+    {
+        "name": "element",
+        "image": "vectorim/element-web:latest",
+        "cpu": 0,
+        "memory": 256,
+        "links": [
+            "postgres:postgres",
+            "redis:redis"
         ],
-        "registeredAt": "2021-09-27T16:36:13.112000+02:00",
-        "registeredBy": "arn:aws:iam::755952719952:user/ebcont"
+        "portMappings": [
+            {
+                "containerPort": 80,
+                "hostPort": 8080,
+                "protocol": "tcp"
+            }
+        ],
+        "essential": true,
+        "entryPoint": [],
+        "command": [],
+        "environment": [],
+        "mountPoints": [
+            {
+                "sourceVolume": "matrix-element-data",
+                "containerPath": "/app"
+            }
+        ],
+        "volumesFrom": [],
+        "linuxParameters": {
+            "capabilities": {}
+        },
+        "privileged": false,
+        "readonlyRootFilesystem": false,
+        "dnsServers": [],
+        "dnsSearchDomains": [],
+        "dockerSecurityOptions": [],
+        "pseudoTerminal": false
+    },
+    {
+        "name": "postgres",
+        "image": "postgres:9.6",
+        "cpu": 0,
+        "memory": 256,
+        "links": [],
+        "portMappings": [
+            {
+                "containerPort": 5432,
+                "hostPort": 5432,
+                "protocol": "tcp"
+            }
+        ],
+        "essential": true,
+        "entryPoint": [],
+        "command": [],
+        "environment": [
+            {
+                "name": "POSTGRES_USER",
+                "value": "synapse"
+            },
+            {
+                "name": "POSTGRES_PASSWORD",
+                "value": "Gly4y8pChg"
+            },
+            {
+                "name": "POSTGRES_INITDB_ARGS",
+                "value": "--encoding='UTF8' --lc-collate='C' --lc-ctype='C'"
+            },
+            {
+                "name": "POSTGRES_DB",
+                "value": "synapse"
+            }
+        ],
+        "mountPoints": [
+            {
+                "sourceVolume": "matrix-postres-data",
+                "containerPath": "/var/lib/postgresql/data"
+            }
+        ],
+        "volumesFrom": [],
+        "linuxParameters": {
+            "capabilities": {}
+        },
+        "hostname": "postgres",
+        "privileged": false,
+        "readonlyRootFilesystem": false,
+        "dnsServers": [],
+        "dnsSearchDomains": [],
+        "dockerSecurityOptions": [],
+        "pseudoTerminal": false,
+        "healthCheck": {
+            "command": [
+                "CMD-SHELL",
+                "pg_isready"
+            ],
+            "interval": 10,
+            "timeout": 5,
+            "retries": 5,
+            "startPeriod": 5
+        }
+    },
+    {
+        "name": "redis",
+        "image": "redis:latest",
+        "cpu": 0,
+        "memory": 256,
+        "links": [],
+        "portMappings": [
+            {
+                "containerPort": 6379,
+                "hostPort": 6379,
+                "protocol": "tcp"
+            }
+        ],
+        "essential": true,
+        "entryPoint": [],
+        "command": [],
+        "environment": [],
+        "mountPoints": [],
+        "volumesFrom": [],
+        "linuxParameters": {
+            "capabilities": {}
+        },
+        "hostname": "redis",
+        "privileged": false,
+        "readonlyRootFilesystem": false,
+        "dnsServers": [],
+        "dnsSearchDomains": [],
+        "dockerSecurityOptions": [],
+        "pseudoTerminal": false
     }
-}
+]

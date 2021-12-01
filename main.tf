@@ -18,56 +18,16 @@ provider "aws" {
 module "ecs_task_definitions_jitsi" {
   source = "./modules/ecs_task_definition"
 
-  ecs_task_values = {
-    ecs_task_name              = "jitsi-meet-task-staging"
-    container_definitions_path = "container_definition_json/jitsi-meet-task-staging.json"
-    efs_volume                 = true
-  }
-
-  ecs_task_volumes = [{
-    name                     = "jitsi-data"
-    file_system_id           = "fs-bce67e88"
-    root_directory           = "/prosody/config"
-    transit_encryption       = "DISABLED"
-    authorization_config_iam = "DISABLED"
-    }, {
-    name                     = "jitsi-images"
-    file_system_id           = "fs-bce67e88"
-    root_directory           = "/jitsi/jitsi-meet/images"
-    transit_encryption       = "DISABLED"
-    authorization_config_iam = "DISABLED"
-  }]
+  ecs_task_values = var.ecs_task_values_jitsi
+  ecs_task_volumes = var.ecs_task_volumes_jitsi
 }
 
 // Task definition from matrix prod or staging
 module "ecs_task_definitions_matrix" {
   source = "./modules/ecs_task_definition"
 
-  ecs_task_values = {
-    ecs_task_name              = "matrix-task-staging"
-    container_definitions_path = "container_definition_json/matrix-task-staging.json"
-    efs_volume                 = true
-  }
-
-  ecs_task_volumes = [{
-    name                     = "matrix-synapse-data"
-    file_system_id           = "fs-bce67e88"
-    root_directory           = "/matrix/synapse"
-    transit_encryption       = "DISABLED"
-    authorization_config_iam = "DISABLED"
-    }, {
-    name                     = "matrix-postres-data"
-    file_system_id           = "fs-bce67e88"
-    root_directory           = "/matrix/postgres/data"
-    transit_encryption       = "DISABLED"
-    authorization_config_iam = "DISABLED"
-    }, {
-    name                     = "matrix-element-data"
-    file_system_id           = "fs-bce67e88"
-    root_directory           = "/matrix/element"
-    transit_encryption       = "DISABLED"
-    authorization_config_iam = "DISABLED"
-  }]
+  ecs_task_values = var.ecs_task_values_matrix
+  ecs_task_volumes = var.ecs_task_volumes_matrix
 }
 
 #module "ecs" {
@@ -94,4 +54,3 @@ module "ecs_task_definitions_matrix" {
 #      module.efs
 #    ]
 #}
-
