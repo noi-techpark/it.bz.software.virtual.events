@@ -36,6 +36,39 @@ module "efs" {
   ecs_task_volumes_concat = concat(var.ecs_task_volumes_jitsi, var.ecs_task_volumes_matrix)
 }
 
+// IAM assume role for ECS cluster
+module "ecs_iam" {
+  source = "./modules/iam"
+
+  iam_role_name             = "ecs-agent"
+  iam_instance_profile_name = "ecs-agent"
+}
+
+// Create EC2 instances
+module "ecs_ec2" {
+  source = "./modules/ec2"
+
+  ecs_lc_image_id = "ami-0e8f6957a4eb67446"
+  ecs_lc_iam_profile = module.ecs_iam.aws_iam_instance_profile_name
+  ecs_lc_sg = [module.aws_security_group_id["sq-test-1"], module.aws_security_group_id["sq-test-2"]]
+  ecs_lc_user_data = "#!/bin/bash\necho ECS_CLUSTER=my-cluster >> /etc/ecs/ecs.config"
+  ecs_lc_instance_type = "t3_micro"
+  ecs_asg_name = "ecs-asg"
+  ecs_asg_vpc_zone_identifier = [module.aws_subnet_id[""], module.aws_subnet_id[""]]
+  ecs_asg_desired_capacity = 1
+  ecs_asg_min_size = 1
+  ecs_asg_max_size = 1
+  ecs_asg_health_check_grace_period = 300
+  ecs_asg_health_check_type = "EC2"
+}
+
+// ECS Cluster
+module "ecs_cluster" {
+  source = "./modules/ecs"
+
+  ecs_cluster_name = "test-cluster"
+}
+
 // Task definition from jitsi meet prod or staging
 module "ecs_task_definitions_jitsi" {
   source = "./modules/ecs_task_definition"
@@ -43,6 +76,11 @@ module "ecs_task_definitions_jitsi" {
   ecs_task_values  = var.ecs_task_values_jitsi
   file_system_id   = module.efs.efs_id
   ecs_task_volumes = var.ecs_task_volumes_jitsi
+
+  // ECS Service values
+  ecs_service_name = "test-service"
+  ecs_cluster_id = "cluster-2134"
+  ecs_service_desired_count = 1
 }
 
 // Task definition from matrix prod or staging
@@ -52,18 +90,9 @@ module "ecs_task_definitions_matrix" {
   ecs_task_values  = var.ecs_task_values_matrix
   file_system_id   = module.efs.efs_id
   ecs_task_volumes = var.ecs_task_volumes_matrix
+  
+  // ECS Service values
+  ecs_service_name = "test-service"
+  ecs_cluster_id = "cluster-2134"
+  ecs_service_desired_count = 1
 }
-
-#module "ecs" {
-#  source = "./modules/ecs"
-#  ecs_cluster_name = var.ecs_cluster_name
-#}
-
-#module "ec2" {
-#    source  = "./modules/ec2"
-#    ec2_ami = " amzn2-ami-ecs-hvm-2.0.20210916-x86_64-ebs"
-#    ec2_instance_type = var.ec2_instance_type
-#    depends_on = [
-#      module.efs
-#    ]
-#}

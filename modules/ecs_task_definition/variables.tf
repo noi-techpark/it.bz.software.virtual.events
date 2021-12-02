@@ -27,3 +27,17 @@ variable "ecs_task_volumes" {
 variable "file_system_id" {
   type = string
 }
+
+variable "ecs_cluster_id" {
+  type = string
+}
+
+variable "ecs_service_name" {
+  type = string
+}
+
+variable "ecs_service_desired_count" {
+  type = number
+
+  default = 1
+}
