@@ -1,29 +1,29 @@
 variable "efs_name" {
-    type = string
+  type = string
 }
 
 variable "efs_encrypted" {
-    type = string
+  type = string
 
-    default = false
+  default = false
 }
 
 variable "efs_kmsKeyId" {
-    type = string
+  type = string
 
-    default = ""
+  default = ""
 }
 
 variable "efs_performance_mode" {
-    type = string
+  type = string
 
-    default = "generalPurpose"
+  default = "generalPurpose"
 }
 
 variable "efs_throughput_mode" {
-    type = string
+  type = string
 
-    default = "bursting"
+  default = "bursting"
 }
 
 variable "ecs_task_volumes_concat" {
@@ -31,13 +31,13 @@ variable "ecs_task_volumes_concat" {
 }
 
 variable "efs_backup_policy_status" {
-    type = string
+  type = string
 
-    default = "DISABLED"
+  default = "DISABLED"
 }
 
 variable "efs_backup_policy" {
-    type = string
+  type = string
 
-    default = ""
+  default = ""
 }

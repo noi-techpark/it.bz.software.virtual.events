@@ -14,22 +14,34 @@ provider "aws" {
   # SECRECT ACCESS KEY
 }
 
+
+/*
+* Requirement: already existing VPC, because AWS limit is 5 per Account
+*/
+module "networking" {
+  source = "./modules/networking"
+
+  aws_vpc_id    = var.aws_vpc_id
+  cidr_block    = var.cidr_block
+  ecs_sq_values = var.ecs_sq_values
+}
+
 /*
 * EFS creation working, but paths for container mount not automatically created
 * need to create access points for every EFS sub-dir or manuel/lambda creates sub-dirs
 */
 module "efs" {
-    source = "./modules/efs"
-    efs_name = var.efs_name
-    ecs_task_volumes_concat = concat(var.ecs_task_volumes_jitsi, var.ecs_task_volumes_matrix)
+  source                  = "./modules/efs"
+  efs_name                = var.efs_name
+  ecs_task_volumes_concat = concat(var.ecs_task_volumes_jitsi, var.ecs_task_volumes_matrix)
 }
 
 // Task definition from jitsi meet prod or staging
 module "ecs_task_definitions_jitsi" {
   source = "./modules/ecs_task_definition"
 
-  ecs_task_values = var.ecs_task_values_jitsi
-  file_system_id = module.efs.efs_id
+  ecs_task_values  = var.ecs_task_values_jitsi
+  file_system_id   = module.efs.efs_id
   ecs_task_volumes = var.ecs_task_volumes_jitsi
 }
 
@@ -37,8 +49,8 @@ module "ecs_task_definitions_jitsi" {
 module "ecs_task_definitions_matrix" {
   source = "./modules/ecs_task_definition"
 
-  ecs_task_values = var.ecs_task_values_matrix
-  file_system_id = module.efs.efs_id
+  ecs_task_values  = var.ecs_task_values_matrix
+  file_system_id   = module.efs.efs_id
   ecs_task_volumes = var.ecs_task_volumes_matrix
 }
 

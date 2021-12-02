@@ -5,16 +5,16 @@ resource "aws_ecs_task_definition" "ecs-task-definition" {
   dynamic "volume" {
     for_each = var.ecs_task_volumes
     content {
-    	  name  = volume.value["name"]
-  	
-    	  efs_volume_configuration {
-    	    file_system_id     = var.file_system_id
-    	    root_directory     = volume.value["root_directory"]
-    	    transit_encryption = volume.value["transit_encryption"]
-    	    authorization_config {
-    	      iam = "DISABLED"
-    	    }
-    	  }
+      name = volume.value["name"]
+
+      efs_volume_configuration {
+        file_system_id     = var.file_system_id
+        root_directory     = volume.value["root_directory"]
+        transit_encryption = volume.value["transit_encryption"]
+        authorization_config {
+          iam = "DISABLED"
+        }
+      }
     }
   }
 }
