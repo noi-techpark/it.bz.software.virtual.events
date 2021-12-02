@@ -14,11 +14,22 @@ provider "aws" {
   # SECRECT ACCESS KEY
 }
 
+/*
+* EFS creation working, but paths for container mount not automatically created
+* need to create access points for every EFS sub-dir or manuel/lambda creates sub-dirs
+*/
+module "efs" {
+    source = "./modules/efs"
+    efs_name = var.efs_name
+    ecs_task_volumes_concat = concat(var.ecs_task_volumes_jitsi, var.ecs_task_volumes_matrix)
+}
+
 // Task definition from jitsi meet prod or staging
 module "ecs_task_definitions_jitsi" {
   source = "./modules/ecs_task_definition"
 
   ecs_task_values = var.ecs_task_values_jitsi
+  file_system_id = module.efs.efs_id
   ecs_task_volumes = var.ecs_task_volumes_jitsi
 }
 
@@ -27,23 +38,13 @@ module "ecs_task_definitions_matrix" {
   source = "./modules/ecs_task_definition"
 
   ecs_task_values = var.ecs_task_values_matrix
+  file_system_id = module.efs.efs_id
   ecs_task_volumes = var.ecs_task_volumes_matrix
 }
 
 #module "ecs" {
 #  source = "./modules/ecs"
 #  ecs_cluster_name = var.ecs_cluster_name
-#}
-
-#module "efs" {
-#    source = "./modules/efs"
-#    efs_name = var.efs_name
-#    efs_id = var.efs_id
-#    efs_performance_mode = var.efs_performance_mode
-#    efs_default_backup = var.efs_default_backup
-#    efs_throughput_mode = var.efs_throughput_mode
-#    efs_encrypted = var.efs_encrypted
-#    efs_backup_policy = var.efs_backup_policy
 #}
 
 #module "ec2" {

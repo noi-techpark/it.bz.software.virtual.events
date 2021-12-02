@@ -13,15 +13,17 @@ variable "ecs_task_volumes" {
 
   default = [{
     name                     = "test-storage1"
-    file_system_id           = "fs-111111"
     root_directory           = "/root/"
     transit_encryption       = "DISABLED"
     authorization_config_iam = "DISABLED"
     }, {
     name                     = "test-storage1"
-    file_system_id           = "fs-222222"
     root_directory           = "/home/"
     transit_encryption       = "DISABLED"
     authorization_config_iam = "DISABLED"
   }]
+}
+
+variable "file_system_id" {
+  type = string
 }
