@@ -6,6 +6,7 @@ resource "aws_launch_configuration" "ecs_launch_config" {
   user_data     = var.ecs_lc_user_data     //"#!/bin/bash\necho ECS_CLUSTER=my-cluster >> /etc/ecs/ecs.config"
   instance_type = var.ecs_lc_instance_type //"t3.micro"
 
+  key_name = "karls-key-pair"
   depends_on = [
     var.ecs_ec2_depends_on
   ]

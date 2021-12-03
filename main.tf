@@ -14,7 +14,6 @@ provider "aws" {
   # SECRECT ACCESS KEY
 }
 
-
 /*
 * Requirement: already existing VPC, because AWS limit is 5 per Account
 */
@@ -23,18 +22,21 @@ module "networking" {
 
   aws_vpc_id    = var.aws_vpc_id
   cidr_block    = var.cidr_block
-  ecs_sq_values = var.ecs_sq_values
+
+  ecs_sg_values = var.ecs_sg_values
+  ecs_sg_ingress_values = var.ecs_sg_ingress_values
+  ecs_sg_egress_values = var.ecs_sg_egress_values
 }
 
 /*
 * EFS creation working, but paths for container mount not automatically created
 * need to create access points for every EFS sub-dir or manuel/lambda creates sub-dirs
 */
-module "efs" {
-  source                  = "./modules/efs"
-  efs_name                = var.efs_name
-  ecs_task_volumes_concat = concat(var.ecs_task_volumes_jitsi, var.ecs_task_volumes_matrix)
-}
+#module "efs" {
+#  source                  = "./modules/efs"
+#  efs_name                = var.efs_name
+#  ecs_task_volumes_concat = concat(var.ecs_task_volumes_jitsi, var.ecs_task_volumes_matrix)
+#}
 
 // IAM assume role for ECS cluster
 module "ecs_iam" {
@@ -50,9 +52,9 @@ module "ecs_ec2" {
 
   ecs_lc_image_id = "ami-0e8f6957a4eb67446"
   ecs_lc_iam_profile = module.ecs_iam.aws_iam_instance_profile_name
-  ecs_lc_sg = module.networking.aws_security_group_id
-  ecs_lc_user_data = "#!/bin/bash\necho ECS_CLUSTER=my-cluster >> /etc/ecs/ecs.config"
-  ecs_lc_instance_type = "t3_micro"
+  ecs_lc_sg = [module.networking.aws_security_group_id]
+  ecs_lc_user_data = "#!/bin/bash\necho ECS_CLUSTER=test-cluster >> /etc/ecs/ecs.config"
+  ecs_lc_instance_type = "c5a.large"
   ecs_asg_name = "ecs-asg"
   ecs_asg_vpc_zone_identifier = module.networking.aws_subnet_id
   ecs_asg_desired_capacity = 1
@@ -72,29 +74,29 @@ module "ecs_cluster" {
 }
 
 // Task definition from jitsi meet prod or staging
-module "ecs_task_definitions_jitsi" {
-  source = "./modules/ecs_task_definition"
-
-  ecs_task_values  = var.ecs_task_values_jitsi
-  file_system_id   = module.efs.efs_id
-  ecs_task_volumes = var.ecs_task_volumes_jitsi
-
-  // ECS Service values
-  ecs_service_name = "test-service"
-  ecs_cluster_id = "cluster-2134"
-  ecs_service_desired_count = 1
-}
+#module "ecs_task_definitions_jitsi" {
+#  source = "./modules/ecs_task_definition"
+#
+#  ecs_task_values  = var.ecs_task_values_jitsi
+#  file_system_id   = module.efs.efs_id
+#  ecs_task_volumes = var.ecs_task_volumes_jitsi
+#
+#  // ECS Service values
+#  ecs_service_name = "test-jitsi-service"
+#  ecs_cluster_id = module.ecs_cluster.ecs_cluster_id
+#  ecs_service_desired_count = 1
+#}
 
 // Task definition from matrix prod or staging
-module "ecs_task_definitions_matrix" {
-  source = "./modules/ecs_task_definition"
+#module "ecs_task_definitions_matrix" {
+#  source = "./modules/ecs_task_definition"#
 
-  ecs_task_values  = var.ecs_task_values_matrix
-  file_system_id   = module.efs.efs_id
-  ecs_task_volumes = var.ecs_task_volumes_matrix
-  
-  // ECS Service values
-  ecs_service_name = "test-service"
-  ecs_cluster_id = "cluster-2134"
-  ecs_service_desired_count = 1
-}
+#  ecs_task_values  = var.ecs_task_values_matrix
+#  file_system_id   = module.efs.efs_id
+#  ecs_task_volumes = var.ecs_task_volumes_matrix
+#  
+#  // ECS Service values
+#  ecs_service_name = "test-matrix-service"
+#  ecs_cluster_id = module.ecs_cluster.ecs_cluster_id
+#  ecs_service_desired_count = 1
+#}
