@@ -50,16 +50,18 @@ module "ecs_ec2" {
 
   ecs_lc_image_id = "ami-0e8f6957a4eb67446"
   ecs_lc_iam_profile = module.ecs_iam.aws_iam_instance_profile_name
-  ecs_lc_sg = [module.aws_security_group_id["sq-test-1"], module.aws_security_group_id["sq-test-2"]]
+  ecs_lc_sg = module.networking.aws_security_group_id
   ecs_lc_user_data = "#!/bin/bash\necho ECS_CLUSTER=my-cluster >> /etc/ecs/ecs.config"
   ecs_lc_instance_type = "t3_micro"
   ecs_asg_name = "ecs-asg"
-  ecs_asg_vpc_zone_identifier = [module.aws_subnet_id[""], module.aws_subnet_id[""]]
+  ecs_asg_vpc_zone_identifier = module.networking.aws_subnet_id
   ecs_asg_desired_capacity = 1
   ecs_asg_min_size = 1
   ecs_asg_max_size = 1
   ecs_asg_health_check_grace_period = 300
   ecs_asg_health_check_type = "EC2"
+
+  ecs_ec2_depends_on = [module.ecs_iam.aws_iam_instance_profile_name]
 }
 
 // ECS Cluster

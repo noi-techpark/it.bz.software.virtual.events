@@ -5,9 +5,13 @@ resource "aws_launch_configuration" "ecs_launch_config" {
   // change my-custer
   user_data     = var.ecs_lc_user_data     //"#!/bin/bash\necho ECS_CLUSTER=my-cluster >> /etc/ecs/ecs.config"
   instance_type = var.ecs_lc_instance_type //"t3.micro"
+
+  depends_on = [
+    var.ecs_ec2_depends_on
+  ]
 }
 
-resource "aws_autoscaling_group" "failure_analysis_ecs_asg" {
+resource "aws_autoscaling_group" "ecs_asg" {
   name                 = var.ecs_asg_name                 //"asg"
   vpc_zone_identifier  = var.ecs_asg_vpc_zone_identifier  //[aws_subnet.pub_subnet.id]
   launch_configuration = aws_launch_configuration.ecs_launch_config.name

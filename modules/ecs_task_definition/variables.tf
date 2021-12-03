@@ -28,11 +28,11 @@ variable "file_system_id" {
   type = string
 }
 
-variable "ecs_cluster_id" {
+variable "ecs_service_name" {
   type = string
 }
 
-variable "ecs_service_name" {
+variable "ecs_cluster_id" {
   type = string
 }
 

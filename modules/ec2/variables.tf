@@ -18,6 +18,10 @@ variable "ecs_lc_instance_type" {
   type = string
 }
 
+variable "ecs_ec2_depends_on" {
+  type = list(any)
+}
+
 variable "ecs_asg_name" {
   type = string
 }
