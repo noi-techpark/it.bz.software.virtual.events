@@ -74,29 +74,29 @@ module "ecs_cluster" {
 }
 
 // Task definition from jitsi meet prod or staging
-#module "ecs_task_definitions_jitsi" {
-#  source = "./modules/ecs_task_definition"
-#
-#  ecs_task_values  = var.ecs_task_values_jitsi
-#  file_system_id   = module.efs.efs_id
-#  ecs_task_volumes = var.ecs_task_volumes_jitsi
-#
-#  // ECS Service values
-#  ecs_service_name = "test-jitsi-service"
-#  ecs_cluster_id = module.ecs_cluster.ecs_cluster_id
-#  ecs_service_desired_count = 1
-#}
+module "ecs_task_definitions_jitsi" {
+  source = "./modules/ecs_task_definition"
+
+  ecs_task_values  = var.ecs_task_values_jitsi
+  file_system_id   = "fs-08fe793123d2b34c1" //module.efs.efs_id
+  ecs_task_volumes = var.ecs_task_volumes_jitsi
+
+  // ECS Service values
+  ecs_service_name = "test-jitsi-service"
+  ecs_cluster_id = module.ecs_cluster.ecs_cluster_id
+  ecs_service_desired_count = 1
+}
 
 // Task definition from matrix prod or staging
-#module "ecs_task_definitions_matrix" {
-#  source = "./modules/ecs_task_definition"#
+module "ecs_task_definitions_matrix" {
+  source = "./modules/ecs_task_definition"
 
-#  ecs_task_values  = var.ecs_task_values_matrix
-#  file_system_id   = module.efs.efs_id
-#  ecs_task_volumes = var.ecs_task_volumes_matrix
-#  
-#  // ECS Service values
-#  ecs_service_name = "test-matrix-service"
-#  ecs_cluster_id = module.ecs_cluster.ecs_cluster_id
-#  ecs_service_desired_count = 1
-#}
+  ecs_task_values  = var.ecs_task_values_matrix
+  file_system_id   = "fs-08fe793123d2b34c1" //module.efs.efs_id
+  ecs_task_volumes = var.ecs_task_volumes_matrix
+  
+  // ECS Service values
+  ecs_service_name = "test-matrix-service"
+  ecs_cluster_id = module.ecs_cluster.ecs_cluster_id
+  ecs_service_desired_count = 1
+}

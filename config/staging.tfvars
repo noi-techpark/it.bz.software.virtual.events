@@ -10,7 +10,7 @@ cidr_block = ["172.31.48.0/28", "172.31.48.16/28"]
 
 // Name value has to be Unique
 ecs_sg_values = {
-  name                     = "sg-test-1"
+  name                     = "sg_test_1"
   description              = "test sg"
 }
 
@@ -32,6 +32,48 @@ ecs_sg_ingress_values = [{
   ingress_description      = "ssh test"
   ingress_from_port        = 22
   ingress_to_port          = 22
+  ingress_protocol         = "tcp"
+  ingress_cidr_blocks      = ["0.0.0.0/0"]
+  ingress_ipv6_cidr_blocks = ["0.0.0.0/0"]
+}, {
+  ingress_description      = "jitsi test"
+  ingress_from_port        = 4443
+  ingress_to_port          = 4443
+  ingress_protocol         = "tcp"
+  ingress_cidr_blocks      = ["0.0.0.0/0"]
+  ingress_ipv6_cidr_blocks = ["0.0.0.0/0"]
+}, {
+  ingress_description      = "matrix test"
+  ingress_from_port        = 8000
+  ingress_to_port          = 8000
+  ingress_protocol         = "tcp"
+  ingress_cidr_blocks      = ["0.0.0.0/0"]
+  ingress_ipv6_cidr_blocks = ["0.0.0.0/0"]
+}, {
+  ingress_description      = "matrix test"
+  ingress_from_port        = 8443
+  ingress_to_port          = 8443
+  ingress_protocol         = "tcp"
+  ingress_cidr_blocks      = ["0.0.0.0/0"]
+  ingress_ipv6_cidr_blocks = ["0.0.0.0/0"]
+}, {
+  ingress_description      = "jvp test"
+  ingress_from_port        = 10000
+  ingress_to_port          = 10000
+  ingress_protocol         = "udp"
+  ingress_cidr_blocks      = ["0.0.0.0/0"]
+  ingress_ipv6_cidr_blocks = ["0.0.0.0/0"]
+}, {
+  ingress_description      = "jvp test"
+  ingress_from_port        = 2049
+  ingress_to_port          = 2049
+  ingress_protocol         = "tcp"
+  ingress_cidr_blocks      = ["0.0.0.0/0"]
+  ingress_ipv6_cidr_blocks = ["0.0.0.0/0"]
+}, {
+  ingress_description      = "jvp test"
+  ingress_from_port        = 8080
+  ingress_to_port          = 8080
   ingress_protocol         = "tcp"
   ingress_cidr_blocks      = ["0.0.0.0/0"]
   ingress_ipv6_cidr_blocks = ["0.0.0.0/0"]

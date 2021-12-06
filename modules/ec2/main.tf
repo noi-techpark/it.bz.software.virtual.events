@@ -2,6 +2,7 @@ resource "aws_launch_configuration" "ecs_launch_config" {
   image_id             = var.ecs_lc_image_id    //"ami-0e8f6957a4eb67446"
   iam_instance_profile = var.ecs_lc_iam_profile //aws_iam_instance_profile.ecs_agent.name
   security_groups      = var.ecs_lc_sg          //[aws_security_group.ecs_sg.id]
+  associate_public_ip_address = true
   // change my-custer
   user_data     = var.ecs_lc_user_data     //"#!/bin/bash\necho ECS_CLUSTER=my-cluster >> /etc/ecs/ecs.config"
   instance_type = var.ecs_lc_instance_type //"t3.micro"
