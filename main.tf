@@ -85,6 +85,10 @@ module "ecs_task_definitions_jitsi" {
   ecs_service_name = "test-jitsi-service"
   ecs_cluster_id = module.ecs_cluster.ecs_cluster_id
   ecs_service_desired_count = 1
+
+  ecs_service_lb_tg_arn = module.ecs_lb.aws_lb_target_group_arns["jitsi-http-target"]
+  ecs_service_lb_container_name = "web"
+  ecs_service_lb_contaiener_port = 8000
 }
 
 // Task definition from matrix prod or staging
@@ -99,4 +103,39 @@ module "ecs_task_definitions_matrix" {
   ecs_service_name = "test-matrix-service"
   ecs_cluster_id = module.ecs_cluster.ecs_cluster_id
   ecs_service_desired_count = 1
+
+  ecs_service_lb_tg_arn = module.ecs_lb.aws_lb_target_group_arns["matrix-http-target"]
+  ecs_service_lb_container_name = "element"
+  ecs_service_lb_contaiener_port = 8080
+}
+
+module "ecs_lb" {
+  source = "./modules/elb"
+
+  lb_name = "test-alb"
+  lb_internal = false
+  lb_type = "application"
+  lb_sg = [module.networking.aws_security_group_id]
+  lb_subnet = module.networking.aws_subnet_id
+  lb_deletion_protection = false
+
+  lb_tg_values = [{
+    lb_tg_name = "jitsi-http-target"
+    lb_tg_port = 8000
+    lb_tg_protocol = "HTTP"
+    lb_tg_vpc = var.aws_vpc_id
+    lb_tg_target_type = "instance"
+    lb_tg_health_check_endabled = true
+    lb_tg_health_check_path = "/"
+    lb_tg_health_check_protocol = "HTTP"
+  }, {
+    lb_tg_name = "matrix-http-target"
+    lb_tg_port = 8080
+    lb_tg_protocol = "HTTP"
+    lb_tg_vpc = var.aws_vpc_id
+    lb_tg_target_type = "instance"
+    lb_tg_health_check_endabled = true
+    lb_tg_health_check_path = "/"
+    lb_tg_health_check_protocol = "HTTP"
+  }]
 }

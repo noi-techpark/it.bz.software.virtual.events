@@ -41,3 +41,15 @@ variable "ecs_service_desired_count" {
 
   default = 1
 }
+
+variable "ecs_service_lb_tg_arn" {
+  type = string
+}
+
+variable "ecs_service_lb_container_name" {
+  type = string
+}
+
+variable "ecs_service_lb_contaiener_port" {
+  type = number
+}
