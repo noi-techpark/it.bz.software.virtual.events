@@ -7,17 +7,17 @@ efs_name = "jitsi-matrix-efs-staging"
 // Subnet and Security Group Values
 aws_vpc_id = "vpc-f63fc59c"
 subnet_values = [{
-  az = "eu-central-1a",
+  az         = "eu-central-1a",
   cidr_block = "172.31.48.0/28"
   }, {
-  az = "eu-central-1b",
+  az         = "eu-central-1b",
   cidr_block = "172.31.48.16/28"
 }]
 
 // Name value has to be Unique
 ecs_sg_values = {
-  name                     = "sg_test_1"
-  description              = "test sg"
+  name        = "sg_test_1"
+  description = "test sg"
 }
 
 ecs_sg_ingress_values = [{
@@ -34,49 +34,49 @@ ecs_sg_ingress_values = [{
   ingress_protocol         = "tcp"
   ingress_cidr_blocks      = ["0.0.0.0/0"]
   ingress_ipv6_cidr_blocks = ["0.0.0.0/0"]
-}, {
+  }, {
   ingress_description      = "ssh test"
   ingress_from_port        = 22
   ingress_to_port          = 22
   ingress_protocol         = "tcp"
   ingress_cidr_blocks      = ["0.0.0.0/0"]
   ingress_ipv6_cidr_blocks = ["0.0.0.0/0"]
-}, {
+  }, {
   ingress_description      = "jitsi test"
   ingress_from_port        = 4443
   ingress_to_port          = 4443
   ingress_protocol         = "tcp"
   ingress_cidr_blocks      = ["0.0.0.0/0"]
   ingress_ipv6_cidr_blocks = ["0.0.0.0/0"]
-}, {
+  }, {
   ingress_description      = "matrix test"
   ingress_from_port        = 8000
   ingress_to_port          = 8000
   ingress_protocol         = "tcp"
   ingress_cidr_blocks      = ["0.0.0.0/0"]
   ingress_ipv6_cidr_blocks = ["0.0.0.0/0"]
-}, {
+  }, {
   ingress_description      = "matrix test"
   ingress_from_port        = 8443
   ingress_to_port          = 8443
   ingress_protocol         = "tcp"
   ingress_cidr_blocks      = ["0.0.0.0/0"]
   ingress_ipv6_cidr_blocks = ["0.0.0.0/0"]
-}, {
+  }, {
   ingress_description      = "jvp test"
   ingress_from_port        = 10000
   ingress_to_port          = 10000
   ingress_protocol         = "udp"
   ingress_cidr_blocks      = ["0.0.0.0/0"]
   ingress_ipv6_cidr_blocks = ["0.0.0.0/0"]
-}, {
+  }, {
   ingress_description      = "jvp test"
   ingress_from_port        = 2049
   ingress_to_port          = 2049
   ingress_protocol         = "tcp"
   ingress_cidr_blocks      = ["0.0.0.0/0"]
   ingress_ipv6_cidr_blocks = ["0.0.0.0/0"]
-}, {
+  }, {
   ingress_description      = "jvp test"
   ingress_from_port        = 8080
   ingress_to_port          = 8080
@@ -86,11 +86,11 @@ ecs_sg_ingress_values = [{
 }]
 
 ecs_sg_egress_values = [{
-  egress_from_port         = 0
-  egress_to_port           = 0
-  egress_protocol          = "-1"
-  egress_cidr_blocks       = ["0.0.0.0/0"]
-  egress_ipv6_cidr_blocks  = ["::/0"]
+  egress_from_port        = 0
+  egress_to_port          = 0
+  egress_protocol         = "-1"
+  egress_cidr_blocks      = ["0.0.0.0/0"]
+  egress_ipv6_cidr_blocks = ["::/0"]
 }]
 
 # jitsi meet task staging variables

@@ -24,23 +24,23 @@ variable "lb_deletion_protection" {
 
 variable "lb_tg_values" {
   type = list(object({
-    lb_tg_name = string
-    lb_tg_port = number
-    lb_tg_protocol = string
-    lb_tg_vpc = string
-    lb_tg_target_type = string
+    lb_tg_name                  = string
+    lb_tg_port                  = number
+    lb_tg_protocol              = string
+    lb_tg_vpc                   = string
+    lb_tg_target_type           = string
     lb_tg_health_check_endabled = bool
-    lb_tg_health_check_path = string
+    lb_tg_health_check_path     = string
     lb_tg_health_check_protocol = string
   }))
 }
 
 variable "lb_listener_values" {
   type = list(object({
-    lb_listener_port = string
-    lb_listener_protocol = string
+    lb_listener_port                = string
+    lb_listener_protocol            = string
     lb_listener_default_action_type = string
-    lb_listener_default_tg_name = string
+    lb_listener_default_tg_name     = string
   }))
 }
 

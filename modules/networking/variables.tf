@@ -23,10 +23,10 @@ variable "ecs_sg_ingress_values" {
 
 variable "ecs_sg_egress_values" {
   type = list(object({
-    egress_from_port         = number
-    egress_to_port           = number
-    egress_protocol          = string
-    egress_cidr_blocks       = list(string)
-    egress_ipv6_cidr_blocks  = list(string)
+    egress_from_port        = number
+    egress_to_port          = number
+    egress_protocol         = string
+    egress_cidr_blocks      = list(string)
+    egress_ipv6_cidr_blocks = list(string)
   }))
 }
