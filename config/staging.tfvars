@@ -6,7 +6,13 @@ efs_name = "jitsi-matrix-efs-staging"
 
 // Subnet and Security Group Values
 aws_vpc_id = "vpc-f63fc59c"
-cidr_block = ["172.31.48.0/28", "172.31.48.16/28"]
+subnet_values = [{
+  az = "eu-central-1a",
+  cidr_block = "172.31.48.0/28"
+  }, {
+  az = "eu-central-1b",
+  cidr_block = "172.31.48.16/28"
+}]
 
 // Name value has to be Unique
 ecs_sg_values = {

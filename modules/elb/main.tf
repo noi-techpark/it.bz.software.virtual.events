@@ -42,18 +42,19 @@ resource "aws_lb_target_group" "test" {
 #}
 
 // Spcifiy the action on incoming traffic -> forward to target groups
-#resource "aws_lb_listener" "front_end" {
-#  load_balancer_arn = aws_lb.front_end.arn
-#  port              = "443"
-#  protocol          = "HTTPS"
-#  ssl_policy        = "ELBSecurityPolicy-2016-08"
-#  certificate_arn   = "arn:aws:iam::187416307283:server-certificate/test_cert_rab3wuqwgja25ct3n4jdj2tzu4"
-#
-#  default_action {
-#    type             = "forward"
-#    target_group_arn = // jitsi-cluster-target-staging - 8443
-#  }
-#}
+resource "aws_lb_listener" "front_end" {
+  for_each = { for listener in var.lb_listener_values : listener.lb_listener_port => listener }
+  load_balancer_arn = aws_lb.test.arn
+  port              = each.value.lb_listener_port //"80"
+  protocol          = each.value.lb_listener_protocol //"HTTP"
+  #ssl_policy        = "ELBSecurityPolicy-2016-08"
+  #certificate_arn   = "arn:aws:iam::187416307283:server-certificate/test_cert_rab3wuqwgja25ct3n4jdj2tzu4"
+
+  default_action {
+    type             =  each.value.lb_listener_default_action_type //"forward"
+    target_group_arn =  aws_lb_target_group.test[each.value.lb_listener_default_tg_name].arn // jitsi-cluster-target-staging - 8443
+  }
+}
 
 /*
 * port 80 redirect - rule: https://#{host}:443/#{path}?#{query} - status code: 301

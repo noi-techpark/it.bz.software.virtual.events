@@ -30,8 +30,8 @@ variable "aws_vpc_id" {
 }
 
 // Subnet CIDRs
-variable "cidr_block" {
-  type = list(string)
+variable "subnet_values" {
+  type = list(map(any))
 }
 
 // Subnet ingress/egress values

@@ -35,6 +35,15 @@ variable "lb_tg_values" {
   }))
 }
 
+variable "lb_listener_values" {
+  type = list(object({
+    lb_listener_port = string
+    lb_listener_protocol = string
+    lb_listener_default_action_type = string
+    lb_listener_default_tg_name = string
+  }))
+}
+
 #variable "lb_tg_target_type" {
 #  type = string
 #}
