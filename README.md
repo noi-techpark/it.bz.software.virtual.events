@@ -104,7 +104,6 @@ Execute the following command (exchange the container name, user name and passwo
 docker exec CONTAINER-NAME prosodyctl --config /config/prosody.cfg.lua register USERNAME meet.jitsi PASSWORD
 </pre>
 
-<<<<<<< HEAD
 ## Matrix/Element tipps and tricks
 
 ### Admin users
@@ -152,9 +151,3 @@ add admin user to Matrix/Elements. This is required to create communities:
 See [How to rename widgets](docs/How_to_rename_widgets.pdf).
 
 
-=======
-## Matrix tipps and tricks
-
-add admin user to Matrix/Elements. This is required to create communities:
-<pre>docker exec -it postgres psql -U synapse synapse -c "update users set admin=1 where name='@username:matrix.virtual.software.bz.it';"</pre>
->>>>>>> 8a705e983e8e9b8c9d53621edec644b9cb5db1d7
