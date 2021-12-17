@@ -168,17 +168,16 @@ module "ecs_lb" {
     lb_listener_protocol            = "HTTP"
     lb_listener_ssl_policy          = "" //empty for http
     lb_listener_cert_arn            = "" //empty for http
-    lb_listener_default_action_type = "forward"
-    lb_listener_default_tg_name     = "jitsi-http-target"
+    lb_listener_default_action_type = "redirect"
+    lb_listener_default_tg_name     = ""
+    }, {
+      lb_listener_port                = "443"
+      lb_listener_protocol            = "HTTPS"
+      lb_listener_ssl_policy          = "ELBSecurityPolicy-2016-08"
+      lb_listener_cert_arn            = "arn:aws:iam::187416307283:server-certificate/test_cert_rab3wuqwgja25ct3n4jdj2tzu4"
+      lb_listener_default_action_type = "forward"
+      lb_listener_default_tg_name     = "jitsi-http-target"
     }
-    #, {
-    #  lb_listener_port                = "443"
-    #  lb_listener_protocol            = "HTTPS"
-    #  lb_listener_ssl_policy          = "ELBSecurityPolicy-2016-08"
-    #  lb_listener_cert_arn            = "arn:aws:iam::187416307283:server-certificate/test_cert_rab3wuqwgja25ct3n4jdj2tzu4"
-    #  lb_listener_default_action_type = "forward"
-    #  lb_listener_default_tg_name     = "jitsi-http-target"
-    #}
   ]
 
   lb_listener_rules_values = [{

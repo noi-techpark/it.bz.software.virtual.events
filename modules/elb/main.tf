@@ -34,13 +34,6 @@ resource "aws_lb_target_group" "tgs" {
   }
 }
 
-// Add resources to target group
-#resource "aws_lb_target_group_attachment" "test" {
-#  target_group_arn = var.lb_tga_arn //aws_lb_target_group.test.arn
-#  target_id        = var.lb_tga_id //aws_instance.test.id
-#  port             = var.lb_tga_port //80
-#}
-
 // Spcifiy the action on incoming traffic -> forward to target groups
 resource "aws_lb_listener" "front_end" {
   for_each          = { for listener in var.lb_listener_values : listener.lb_listener_port => listener }
@@ -51,8 +44,17 @@ resource "aws_lb_listener" "front_end" {
   certificate_arn   = each.value.lb_listener_protocol == "HTTPS" ? each.value.lb_listener_cert_arn : null
 
   default_action {
-    type             = each.value.lb_listener_default_action_type                          //"forward"
-    target_group_arn = aws_lb_target_group.tgs[each.value.lb_listener_default_tg_name].arn // jitsi-cluster-target-staging - 8443
+    type             = each.value.lb_listener_default_action_type
+    target_group_arn = each.value.lb_listener_default_action_type == "forward" ? aws_lb_target_group.tgs[each.value.lb_listener_default_tg_name].arn : null
+    # if action is set to redirect e.g. pot 80, set default https redirect
+    dynamic "redirect" {
+      for_each = each.value.lb_listener_default_action_type == "redirect" ? ["create only this one redirect action"] : []
+      content {
+        port        = "443"
+        protocol    = "HTTPS"
+        status_code = "HTTP_301"
+      }
+    }
   }
 }
 
@@ -71,12 +73,6 @@ resource "aws_lb_listener_rule" "forwarding_rules" {
     type             = each.value.lb_listener_rule_action_type
     target_group_arn = aws_lb_target_group.tgs[each.value.lb_listener_rule_action_tg_name].arn
   }
-
-  #condition {
-  #  path_pattern {
-  #    values = ["/elements/*"]
-  #  }
-  #}
 
   condition {
     host_header {
