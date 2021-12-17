@@ -1,5 +1,5 @@
 // Create Application LB
-resource "aws_lb" "test" {
+resource "aws_lb" "elb" {
   name               = var.lb_name
   internal           = var.lb_internal //false
   load_balancer_type = var.lb_type     //"application"
@@ -20,7 +20,7 @@ resource "aws_lb" "test" {
 }
 
 // Create Target groups
-resource "aws_lb_target_group" "test" {
+resource "aws_lb_target_group" "tgs" {
   for_each    = { for lb_tg in var.lb_tg_values : lb_tg.lb_tg_name => lb_tg }
   name        = each.value.lb_tg_name        //"tf-example-lb-tg"
   port        = each.value.lb_tg_port        //80
@@ -44,15 +44,15 @@ resource "aws_lb_target_group" "test" {
 // Spcifiy the action on incoming traffic -> forward to target groups
 resource "aws_lb_listener" "front_end" {
   for_each          = { for listener in var.lb_listener_values : listener.lb_listener_port => listener }
-  load_balancer_arn = aws_lb.test.arn
+  load_balancer_arn = aws_lb.elb.arn
   port              = each.value.lb_listener_port     //"80"
   protocol          = each.value.lb_listener_protocol //"HTTP"
-  #ssl_policy        = "ELBSecurityPolicy-2016-08"
-  #certificate_arn   = "arn:aws:iam::187416307283:server-certificate/test_cert_rab3wuqwgja25ct3n4jdj2tzu4"
+  ssl_policy        = each.value.lb_listener_protocol == "HTTPS" ? each.value.lb_listener_ssl_policy : null
+  certificate_arn   = each.value.lb_listener_protocol == "HTTPS" ? each.value.lb_listener_cert_arn : null
 
   default_action {
-    type             = each.value.lb_listener_default_action_type                           //"forward"
-    target_group_arn = aws_lb_target_group.test[each.value.lb_listener_default_tg_name].arn // jitsi-cluster-target-staging - 8443
+    type             = each.value.lb_listener_default_action_type                          //"forward"
+    target_group_arn = aws_lb_target_group.tgs[each.value.lb_listener_default_tg_name].arn // jitsi-cluster-target-staging - 8443
   }
 }
 
@@ -62,41 +62,25 @@ resource "aws_lb_listener" "front_end" {
 * listener on 8448 (matrix federation) - rule: forward -> 8008 -> matrix-cluster-target-staging
 */
 
-resource "aws_lb_listener_rule" "static" {
-  listener_arn = aws_lb_listener.front_end["80"].arn //aws_lb_listener.front_end.arn
-  priority     = 100
+resource "aws_lb_listener_rule" "forwarding_rules" {
+  for_each     = { for rule in var.lb_listener_rules_values : rule.lb_listener_rule_action_tg_name => rule }
+  listener_arn = aws_lb_listener.front_end[each.value.lb_listener_rule_port].arn
+  priority     = each.value.lb_listener_rule_priority
 
   action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.test["matrix-http-target"].arn
+    type             = each.value.lb_listener_rule_action_type
+    target_group_arn = aws_lb_target_group.tgs[each.value.lb_listener_rule_action_tg_name].arn
   }
+
+  #condition {
+  #  path_pattern {
+  #    values = ["/elements/*"]
+  #  }
+  #}
 
   condition {
-    path_pattern {
-      values = ["/elements/*"]
+    host_header {
+      values = each.value.lb_listener_rule_condition_host_header
     }
   }
-
-  #  condition {
-  #    host_header {
-  #      values = ["matrix.virtual.software.testingmachine.eu", "synapse.virtual.software.testingmachine.eu"] //matrix-cluster-target-staging 8008 - health: /health
-  #    }
-  #  }
-  #
-  #  condition {
-  #    host_header {
-  #      values = ["element.virtual.software.testingmachine.eu"] //matrix-element-target-staging 8080 - health: /
-  #    }
-  #  }
-  #
-  #  action {
-  #    type             = "forward"
-  #    target_group_arn = var.lb_rule_target_arn //aws_lb_target_group.static.arn e.g. matrix-cluster-target-staging
-  #  }
-  #
-  #  condition {
-  #    host_header {
-  #      values = ["jitsi.virtual.software.testingmachine.eu"] //matrix-element-target-staging 8443 - health: /
-  #    }
-  #  }
 }

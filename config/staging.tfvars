@@ -15,83 +15,52 @@ subnet_values = [{
 }]
 
 // Name value has to be Unique
-ecs_sg_values = {
-  name        = "sg_test_1"
-  description = "test sg"
+alb_sg_values = {
+  name        = "jitsi-matrix-alb-sg-staging"
+  description = "jitsi matrix alb sg staging"
 }
 
-ecs_sg_ingress_values = [{
-  ingress_description      = "https test"
-  ingress_from_port        = 443
-  ingress_to_port          = 443
-  ingress_protocol         = "tcp"
-  ingress_cidr_blocks      = ["0.0.0.0/0"]
-  ingress_ipv6_cidr_blocks = ["0.0.0.0/0"]
+alb_sg_ingress_values = [{
+  ingress_description     = "standard https port"
+  ingress_from_port       = 443
+  ingress_to_port         = 443
+  ingress_protocol        = "tcp"
+  ingress_cidr_blocks     = ["0.0.0.0/0"]
+  ingress_security_groups = []
   }, {
-  ingress_description      = "http test"
-  ingress_from_port        = 80
-  ingress_to_port          = 80
-  ingress_protocol         = "tcp"
-  ingress_cidr_blocks      = ["0.0.0.0/0"]
-  ingress_ipv6_cidr_blocks = ["0.0.0.0/0"]
+  ingress_description     = "standard http port"
+  ingress_from_port       = 80
+  ingress_to_port         = 80
+  ingress_protocol        = "tcp"
+  ingress_cidr_blocks     = ["0.0.0.0/0"]
+  ingress_security_groups = []
   }, {
-  ingress_description      = "ssh test"
-  ingress_from_port        = 22
-  ingress_to_port          = 22
-  ingress_protocol         = "tcp"
-  ingress_cidr_blocks      = ["0.0.0.0/0"]
-  ingress_ipv6_cidr_blocks = ["0.0.0.0/0"]
+  ingress_description     = "synapse federation port"
+  ingress_from_port       = 8448
+  ingress_to_port         = 8448
+  ingress_protocol        = "tcp"
+  ingress_cidr_blocks     = ["0.0.0.0/0"]
+  ingress_security_groups = []
   }, {
-  ingress_description      = "jitsi test"
-  ingress_from_port        = 4443
-  ingress_to_port          = 4443
-  ingress_protocol         = "tcp"
-  ingress_cidr_blocks      = ["0.0.0.0/0"]
-  ingress_ipv6_cidr_blocks = ["0.0.0.0/0"]
-  }, {
-  ingress_description      = "matrix test"
-  ingress_from_port        = 8000
-  ingress_to_port          = 8000
-  ingress_protocol         = "tcp"
-  ingress_cidr_blocks      = ["0.0.0.0/0"]
-  ingress_ipv6_cidr_blocks = ["0.0.0.0/0"]
-  }, {
-  ingress_description      = "matrix test"
-  ingress_from_port        = 8443
-  ingress_to_port          = 8443
-  ingress_protocol         = "tcp"
-  ingress_cidr_blocks      = ["0.0.0.0/0"]
-  ingress_ipv6_cidr_blocks = ["0.0.0.0/0"]
-  }, {
-  ingress_description      = "jvp test"
-  ingress_from_port        = 10000
-  ingress_to_port          = 10000
-  ingress_protocol         = "udp"
-  ingress_cidr_blocks      = ["0.0.0.0/0"]
-  ingress_ipv6_cidr_blocks = ["0.0.0.0/0"]
-  }, {
-  ingress_description      = "jvp test"
-  ingress_from_port        = 2049
-  ingress_to_port          = 2049
-  ingress_protocol         = "tcp"
-  ingress_cidr_blocks      = ["0.0.0.0/0"]
-  ingress_ipv6_cidr_blocks = ["0.0.0.0/0"]
-  }, {
-  ingress_description      = "jvp test"
-  ingress_from_port        = 8080
-  ingress_to_port          = 8080
-  ingress_protocol         = "tcp"
-  ingress_cidr_blocks      = ["0.0.0.0/0"]
-  ingress_ipv6_cidr_blocks = ["0.0.0.0/0"]
+  ingress_description     = "jvb udp test"
+  ingress_from_port       = 10000
+  ingress_to_port         = 10000
+  ingress_protocol        = "udp"
+  ingress_cidr_blocks     = ["0.0.0.0/0"]
+  ingress_security_groups = []
 }]
 
-ecs_sg_egress_values = [{
-  egress_from_port        = 0
-  egress_to_port          = 0
-  egress_protocol         = "-1"
-  egress_cidr_blocks      = ["0.0.0.0/0"]
-  egress_ipv6_cidr_blocks = ["::/0"]
+alb_sg_egress_values = [{
+  egress_from_port   = 0
+  egress_to_port     = 0
+  egress_protocol    = "-1"
+  egress_destination = ["0.0.0.0/0"]
 }]
+
+ecs_sg_values = {
+  name        = "jitsi-matrix-ecs-sg-staging"
+  description = "jitsi matrix ecs sg staging"
+}
 
 # jitsi meet task staging variables
 ecs_task_values_jitsi = {

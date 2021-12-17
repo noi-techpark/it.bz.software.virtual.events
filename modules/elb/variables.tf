@@ -39,23 +39,19 @@ variable "lb_listener_values" {
   type = list(object({
     lb_listener_port                = string
     lb_listener_protocol            = string
+    lb_listener_ssl_policy          = string
+    lb_listener_cert_arn            = string
     lb_listener_default_action_type = string
     lb_listener_default_tg_name     = string
   }))
 }
 
-#variable "lb_tg_target_type" {
-#  type = string
-#}
-#
-#variable "lb_tga_arn" {
-#  type = string
-#}
-#
-#variable "lb_tga_id" {
-#  type = string
-#}
-#
-#variable "lb_tga_port" {
-#  type = string
-#}
+variable "lb_listener_rules_values" {
+  type = list(object({
+    lb_listener_rule_port                  = string
+    lb_listener_rule_priority              = number
+    lb_listener_rule_action_type           = string
+    lb_listener_rule_action_tg_name        = string
+    lb_listener_rule_condition_host_header = list(string)
+  }))
+}

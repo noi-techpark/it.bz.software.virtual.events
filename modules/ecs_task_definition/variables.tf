@@ -42,14 +42,10 @@ variable "ecs_service_desired_count" {
   default = 1
 }
 
-variable "ecs_service_lb_tg_arn" {
-  type = string
-}
-
-variable "ecs_service_lb_container_name" {
-  type = string
-}
-
-variable "ecs_service_lb_contaiener_port" {
-  type = number
+variable "ecs_service_lb_values" {
+  type = list(object({
+    ecs_service_lb_tg_arn          = string
+    ecs_service_lb_container_name  = string
+    ecs_service_lb_contaiener_port = number
+  }))
 }

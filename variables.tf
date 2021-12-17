@@ -35,29 +35,33 @@ variable "subnet_values" {
 }
 
 // Subnet ingress/egress values
-variable "ecs_sg_values" {
+variable "alb_sg_values" {
   type = map(any)
 }
 
-variable "ecs_sg_ingress_values" {
+variable "alb_sg_ingress_values" {
   type = list(object({
-    ingress_description      = string
-    ingress_from_port        = number
-    ingress_to_port          = number
-    ingress_protocol         = string
-    ingress_cidr_blocks      = list(string)
-    ingress_ipv6_cidr_blocks = list(string)
+    ingress_description     = string
+    ingress_from_port       = number
+    ingress_to_port         = number
+    ingress_protocol        = string
+    ingress_cidr_blocks     = list(string)
+    ingress_security_groups = list(string)
   }))
 }
 
-variable "ecs_sg_egress_values" {
+variable "alb_sg_egress_values" {
   type = list(object({
-    egress_from_port        = number
-    egress_to_port          = number
-    egress_protocol         = string
-    egress_cidr_blocks      = list(string)
-    egress_ipv6_cidr_blocks = list(string)
+    egress_from_port   = number
+    egress_to_port     = number
+    egress_protocol    = string
+    egress_destination = list(string)
   }))
+}
+
+// Subnet ingress/egress values
+variable "ecs_sg_values" {
+  type = map(any)
 }
 
 # ECS Cluster
