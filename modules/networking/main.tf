@@ -5,6 +5,6 @@ resource "aws_subnet" "subnet" {
   availability_zone = each.value.az
 
   tags = {
-    Name = "test"
+    Name = "${each.value.subnet_name}"
   }
 }

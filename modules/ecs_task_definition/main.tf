@@ -1,6 +1,7 @@
 resource "aws_ecs_task_definition" "ecs_task_definition" {
-  family                = var.ecs_task_values.ecs_task_name
-  container_definitions = file(var.ecs_task_values.container_definitions_path)
+  family                   = var.ecs_task_values.ecs_task_name
+  container_definitions    = file(var.ecs_task_values.container_definitions_path)
+  requires_compatibilities = [var.ecs_task_values.requires_compatibilities]
 
   dynamic "volume" {
     for_each = var.ecs_task_volumes
@@ -17,10 +18,10 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
 }
 
 resource "aws_ecs_service" "worker" {
-  name            = var.ecs_service_name //"name"
+  name            = var.ecs_service_name
   cluster         = var.ecs_cluster_id
   task_definition = aws_ecs_task_definition.ecs_task_definition.arn
-  desired_count   = var.ecs_service_desired_count //1
+  desired_count   = var.ecs_service_desired_count
 
   dynamic "load_balancer" {
     for_each = var.ecs_service_lb_values

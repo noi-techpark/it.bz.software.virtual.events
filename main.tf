@@ -9,6 +9,9 @@ terraform {
 
 provider "aws" {
   region = var.region
+  default_tags {
+    tags = var.default_tags
+  }
 }
 
 /*
@@ -26,9 +29,42 @@ module "alb_sg" {
 
   aws_vpc_id = var.aws_vpc_id
 
-  sg_values         = var.alb_sg_values
-  sg_ingress_values = var.alb_sg_ingress_values
-  sg_egress_values  = var.alb_sg_egress_values
+  sg_values = var.alb_sg_values
+  sg_ingress_values = [{
+    ingress_description     = "standard https port"
+    ingress_from_port       = 443
+    ingress_to_port         = 443
+    ingress_protocol        = "tcp"
+    ingress_cidr_blocks     = ["0.0.0.0/0"]
+    ingress_security_groups = []
+    }, {
+    ingress_description     = "standard http port"
+    ingress_from_port       = 80
+    ingress_to_port         = 80
+    ingress_protocol        = "tcp"
+    ingress_cidr_blocks     = ["0.0.0.0/0"]
+    ingress_security_groups = []
+    }, {
+    ingress_description     = "synapse federation port"
+    ingress_from_port       = 8448
+    ingress_to_port         = 8448
+    ingress_protocol        = "tcp"
+    ingress_cidr_blocks     = ["0.0.0.0/0"]
+    ingress_security_groups = []
+    }, {
+    ingress_description     = "jvb udp test"
+    ingress_from_port       = 10000
+    ingress_to_port         = 10000
+    ingress_protocol        = "udp"
+    ingress_cidr_blocks     = ["0.0.0.0/0"]
+    ingress_security_groups = []
+  }]
+  sg_egress_values = [{
+    egress_from_port   = 0
+    egress_to_port     = 0
+    egress_protocol    = "-1"
+    egress_destination = ["0.0.0.0/0"]
+  }]
 }
 
 module "ec2_sg" {
@@ -80,7 +116,12 @@ module "ec2_sg" {
     ingress_cidr_blocks     = []
     ingress_security_groups = [module.alb_sg.aws_security_group_id]
   }]
-  sg_egress_values = var.alb_sg_egress_values
+  sg_egress_values = [{
+    egress_from_port   = 0
+    egress_to_port     = 0
+    egress_protocol    = "-1"
+    egress_destination = ["0.0.0.0/0"]
+  }]
 }
 
 /*
@@ -95,46 +136,47 @@ module "ec2_sg" {
 #  ecs_task_volumes_concat = concat(var.ecs_task_volumes_jitsi, var.ecs_task_volumes_matrix)
 #}
 
-// IAM assume role for ECS cluster
+# IAM assume role for ECS cluster
 module "ecs_iam" {
   source = "./modules/iam"
 
-  iam_role_name             = "ecs-agent"
-  iam_instance_profile_name = "ecs-agent"
+  iam_role_name             = var.ecs_iam_role_name
+  iam_instance_profile_name = var.ecs_iam_instance_profile_name
 }
 
-// Create EC2 instances
+# Create EC2 instances
 module "ecs_ec2" {
   source = "./modules/ec2"
 
-  ecs_lc_image_id                   = "ami-0e8f6957a4eb67446"
+  ecs_lc_image_id                   = var.ecs_lc_image_id
   ecs_lc_iam_profile                = module.ecs_iam.aws_iam_instance_profile_name
   ecs_lc_sg                         = [module.ec2_sg.aws_security_group_id]
-  ecs_lc_user_data                  = "#!/bin/bash\necho ECS_CLUSTER=test-cluster >> /etc/ecs/ecs.config"
-  ecs_lc_instance_type              = "c5a.large"
-  ecs_asg_name                      = "ecs-asg"
+  ecs_lc_user_data                  = var.ecs_lc_user_data
+  ecs_lc_instance_type              = var.ecs_lc_instance_type
+  ecs_asg_name                      = var.ecs_asg_name
   ecs_asg_vpc_zone_identifier       = module.networking.aws_subnet_id
-  ecs_asg_desired_capacity          = 1
-  ecs_asg_min_size                  = 1
-  ecs_asg_max_size                  = 1
-  ecs_asg_health_check_grace_period = 300
-  ecs_asg_health_check_type         = "EC2"
+  ecs_asg_desired_capacity          = var.ecs_asg_desired_capacity
+  ecs_asg_min_size                  = var.ecs_asg_min_size
+  ecs_asg_max_size                  = var.ecs_asg_max_size
+  ecs_asg_health_check_grace_period = var.ecs_asg_health_check_grace_period
+  ecs_asg_health_check_type         = var.ecs_asg_health_check_type
 
   ecs_ec2_depends_on = [module.ecs_iam.aws_iam_instance_profile_name]
 }
 
+# Create one LB with multiple target groups, listener and LB rules
 module "ecs_lb" {
   source = "./modules/elb"
 
-  lb_name                = "test-alb"
-  lb_internal            = false
-  lb_type                = "application"
+  lb_name                = var.lb_name
+  lb_internal            = var.lb_internal
+  lb_type                = var.lb_type
   lb_sg                  = [module.alb_sg.aws_security_group_id]
   lb_subnet              = module.networking.aws_subnet_id
-  lb_deletion_protection = false
+  lb_deletion_protection = var.lb_deletion_protection
 
   lb_tg_values = [{
-    lb_tg_name                  = "jitsi-http-target"
+    lb_tg_name                  = var.lb_tg_name_jitsi
     lb_tg_port                  = 8000
     lb_tg_protocol              = "HTTP"
     lb_tg_vpc                   = var.aws_vpc_id
@@ -144,7 +186,7 @@ module "ecs_lb" {
     lb_tg_health_check_protocol = "HTTP"
 
     }, {
-    lb_tg_name                  = "element-http-target"
+    lb_tg_name                  = var.lb_tg_name_element
     lb_tg_port                  = 8080
     lb_tg_protocol              = "HTTP"
     lb_tg_vpc                   = var.aws_vpc_id
@@ -153,7 +195,7 @@ module "ecs_lb" {
     lb_tg_health_check_path     = "/"
     lb_tg_health_check_protocol = "HTTP"
     }, {
-    lb_tg_name                  = "synapse-http-target"
+    lb_tg_name                  = var.lb_tg_name_synapse
     lb_tg_port                  = 8008
     lb_tg_protocol              = "HTTP"
     lb_tg_vpc                   = var.aws_vpc_id
@@ -171,12 +213,12 @@ module "ecs_lb" {
     lb_listener_default_action_type = "redirect"
     lb_listener_default_tg_name     = ""
     }, {
-      lb_listener_port                = "443"
-      lb_listener_protocol            = "HTTPS"
-      lb_listener_ssl_policy          = "ELBSecurityPolicy-2016-08"
-      lb_listener_cert_arn            = "arn:aws:iam::187416307283:server-certificate/test_cert_rab3wuqwgja25ct3n4jdj2tzu4"
-      lb_listener_default_action_type = "forward"
-      lb_listener_default_tg_name     = "jitsi-http-target"
+    lb_listener_port                = "443"
+    lb_listener_protocol            = "HTTPS"
+    lb_listener_ssl_policy          = var.lb_listener_ssl_policy
+    lb_listener_cert_arn            = var.lb_listener_cert_arn
+    lb_listener_default_action_type = "forward"
+    lb_listener_default_tg_name     = var.lb_tg_name_jitsi
     }
   ]
 
@@ -184,64 +226,64 @@ module "ecs_lb" {
     lb_listener_rule_port                  = "80"
     lb_listener_rule_priority              = 100
     lb_listener_rule_action_type           = "forward"
-    lb_listener_rule_action_tg_name        = "synapse-http-target"
-    lb_listener_rule_condition_host_header = ["matrix.virtual.software.testingmachine.eu", "synapse.virtual.software.testingmachine.eu"]
+    lb_listener_rule_action_tg_name        = var.lb_tg_name_synapse
+    lb_listener_rule_condition_host_header = var.lb_listener_rule_condition_host_header_matrix-synapse
     }, {
     lb_listener_rule_port                  = "80"
     lb_listener_rule_priority              = 99
     lb_listener_rule_action_type           = "forward"
-    lb_listener_rule_action_tg_name        = "element-http-target"
-    lb_listener_rule_condition_host_header = ["element.virtual.software.testingmachine.eu"]
+    lb_listener_rule_action_tg_name        = var.lb_tg_name_element
+    lb_listener_rule_condition_host_header = var.lb_listener_rule_condition_host_header_element
   }]
 }
 
 
-// ECS Cluster
+# ECS Cluster
 module "ecs_cluster" {
   source = "./modules/ecs"
 
-  ecs_cluster_name = "test-cluster"
+  ecs_cluster_name = var.ecs_cluster_name
 }
 
-// Task definition from jitsi meet prod or staging
+# Task definition from jitsi meet prod or staging
 module "ecs_task_definitions_jitsi" {
   source = "./modules/ecs_task_definition"
 
   ecs_task_values  = var.ecs_task_values_jitsi
-  file_system_id   = "fs-08fe793123d2b34c1" //module.efs.efs_id
+  file_system_id   = var.efs_id
   ecs_task_volumes = var.ecs_task_volumes_jitsi
 
-  // ECS Service values
-  ecs_service_name          = "test-jitsi-service"
+  # ECS Service values
+  ecs_service_name          = var.ecs_service_name_jitsi
   ecs_cluster_id            = module.ecs_cluster.ecs_cluster_id
   ecs_service_desired_count = 1
 
   ecs_service_lb_values = [{
-    ecs_service_lb_tg_arn          = module.ecs_lb.aws_lb_target_groups.jitsi-http-target.arn
+    ecs_service_lb_tg_arn          = module.ecs_lb.aws_lb_target_groups[var.lb_tg_name_jitsi].arn
     ecs_service_lb_container_name  = "web"
     ecs_service_lb_contaiener_port = 80
   }]
 }
 
-// Task definition from matrix prod or staging
+# Task definition from matrix prod or staging
 module "ecs_task_definitions_matrix" {
   source = "./modules/ecs_task_definition"
 
   ecs_task_values  = var.ecs_task_values_matrix
-  file_system_id   = "fs-08fe793123d2b34c1" //module.efs.efs_id
+  file_system_id   = var.efs_id
   ecs_task_volumes = var.ecs_task_volumes_matrix
 
-  // ECS Service values
-  ecs_service_name          = "test-matrix-service"
+  # ECS Service values
+  ecs_service_name          = var.ecs_service_name_matrix
   ecs_cluster_id            = module.ecs_cluster.ecs_cluster_id
   ecs_service_desired_count = 1
 
   ecs_service_lb_values = [{
-    ecs_service_lb_tg_arn          = module.ecs_lb.aws_lb_target_groups.element-http-target.arn
+    ecs_service_lb_tg_arn          = module.ecs_lb.aws_lb_target_groups[var.lb_tg_name_element].arn
     ecs_service_lb_container_name  = "element"
     ecs_service_lb_contaiener_port = 80
     }, {
-    ecs_service_lb_tg_arn          = module.ecs_lb.aws_lb_target_groups.synapse-http-target.arn
+    ecs_service_lb_tg_arn          = module.ecs_lb.aws_lb_target_groups[var.lb_tg_name_synapse].arn
     ecs_service_lb_container_name  = "synapse"
     ecs_service_lb_contaiener_port = 8008
   }]

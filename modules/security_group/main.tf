@@ -1,5 +1,4 @@
 resource "aws_security_group" "sg" {
-  //for_each    = { for sq_value in var.sq_values : sq_value.name => sq_value }
   name        = var.sg_values.name
   description = var.sg_values.description
   vpc_id      = var.aws_vpc_id
@@ -11,8 +10,8 @@ resource "aws_security_group" "sg" {
       from_port       = ingress.value.ingress_from_port
       to_port         = ingress.value.ingress_to_port
       protocol        = ingress.value.ingress_protocol
-      cidr_blocks     = ingress.value.ingress_cidr_blocks     //contains(ingress.value.ingress_source, "/") ? ingress.value.ingress_source : null
-      security_groups = ingress.value.ingress_security_groups //contains(ingress.value.ingress_source, "sg-") ? ingress.value.ingress_source : null
+      cidr_blocks     = ingress.value.ingress_cidr_blocks
+      security_groups = ingress.value.ingress_security_groups
     }
   }
 

@@ -22,15 +22,15 @@ resource "aws_lb" "elb" {
 // Create Target groups
 resource "aws_lb_target_group" "tgs" {
   for_each    = { for lb_tg in var.lb_tg_values : lb_tg.lb_tg_name => lb_tg }
-  name        = each.value.lb_tg_name        //"tf-example-lb-tg"
-  port        = each.value.lb_tg_port        //80
-  protocol    = each.value.lb_tg_protocol    //"HTTP"
-  vpc_id      = each.value.lb_tg_vpc         //aws_vpc.main.id
-  target_type = each.value.lb_tg_target_type //"instance"
+  name        = each.value.lb_tg_name
+  port        = each.value.lb_tg_port
+  protocol    = each.value.lb_tg_protocol
+  vpc_id      = each.value.lb_tg_vpc
+  target_type = each.value.lb_tg_target_type
   health_check {
-    enabled  = each.value.lb_tg_health_check_endabled //true
-    path     = each.value.lb_tg_health_check_path     // "/"
-    protocol = each.value.lb_tg_health_check_protocol // "HTTPS"
+    enabled  = each.value.lb_tg_health_check_endabled
+    path     = each.value.lb_tg_health_check_path
+    protocol = each.value.lb_tg_health_check_protocol
   }
 }
 
@@ -38,8 +38,8 @@ resource "aws_lb_target_group" "tgs" {
 resource "aws_lb_listener" "front_end" {
   for_each          = { for listener in var.lb_listener_values : listener.lb_listener_port => listener }
   load_balancer_arn = aws_lb.elb.arn
-  port              = each.value.lb_listener_port     //"80"
-  protocol          = each.value.lb_listener_protocol //"HTTP"
+  port              = each.value.lb_listener_port
+  protocol          = each.value.lb_listener_protocol
   ssl_policy        = each.value.lb_listener_protocol == "HTTPS" ? each.value.lb_listener_ssl_policy : null
   certificate_arn   = each.value.lb_listener_protocol == "HTTPS" ? each.value.lb_listener_cert_arn : null
 
