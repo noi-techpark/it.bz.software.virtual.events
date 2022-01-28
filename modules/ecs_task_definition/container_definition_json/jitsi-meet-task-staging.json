@@ -1,7 +1,7 @@
 [
     {
         "name": "web",
-        "image": "jitsi/web:stable-6433",
+        "image": "jitsi/web:stable-6826",
         "cpu": 0,
         "memory": 256,
         "links": [
@@ -419,7 +419,7 @@
     },
     {
         "name": "prosody",
-        "image": "jitsi/prosody:stable-6433",
+        "image": "jitsi/prosody:stable-6826",
         "cpu": 0,
         "memory": 256,
         "links": [],
@@ -681,7 +681,7 @@
     },
     {
         "name": "jicofo",
-        "image": "jitsi/jicofo:stable-6433",
+        "image": "jitsi/jicofo:stable-6826",
         "cpu": 0,
         "memory": 256,
         "links": [
@@ -843,7 +843,7 @@
     },
     {
         "name": "jvb",
-        "image": "jitsi/jvb:stable-6433",
+        "image": "jitsi/jvb:stable-6826",
         "cpu": 0,
         "memoryReservation": 1024,
         "links": [
@@ -951,7 +951,7 @@
             },
             {
                 "name": "JVB_TCP_HARVESTER_DISABLED",
-                "value": "true"
+                "value": "false"
             },
             {
                 "name": "JVB_STUN_SERVERS",

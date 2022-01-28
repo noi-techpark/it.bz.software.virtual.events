@@ -1,4 +1,4 @@
-region = "eu-central-1"
+region = "eu-west-1"
 
 # Tagging
 default_tags = {
@@ -6,21 +6,21 @@ default_tags = {
   Responsible = "Ebcont"
   Owner       = "NOI"
   Porject     = "ECS Cluster"
+  Info        = "Terraform"
 }
 
 # efs for staging
-efs_name = "jitsi-matrix-efs-staging"
-efs_id   = "fs-08fe793123d2b34c1"
+efs_id = "fs-bce67e88"
 
 # Subnet and Security Group Values
-aws_vpc_id = "vpc-f63fc59c"
+aws_vpc_id = "vpc-f57aea91"
 subnet_values = [{
   subnet_name = "jitsi-matrix-subnet-1-staging"
-  az          = "eu-central-1a",
-  cidr_block  = "172.31.48.0/28"
+  az          = "eu-west-1a",
+  cidr_block  = "172.31.48.0/28" // 172.31.0.0
   }, {
   subnet_name = "jitsi-matrix-subnet-2-staging"
-  az          = "eu-central-1b",
+  az          = "eu-west-1b",
   cidr_block  = "172.31.48.16/28"
 }]
 
@@ -39,9 +39,13 @@ ecs_sg_values = {
   description = "jitsi matrix ecs sg staging"
 }
 
+efs_sg_values = {
+  name        = "jitsi-matrix-efs-sg-staging"
+  description = "jitsi matrix efs sg staging"
+}
+
 # EC2 autoscaling and launch configuration values for ECS service
-ecs_lc_image_id                   = "ami-0e8f6957a4eb67446"
-ecs_lc_user_data                  = "#!/bin/bash\necho ECS_CLUSTER=test-cluster >> /etc/ecs/ecs.config"
+ecs_lc_image_id                   = "ami-06bb94c46ddc47feb" //"ami-0e8f6957a4eb67446"
 ecs_lc_instance_type              = "c5a.large"
 ecs_asg_name                      = "jitsi-matrix-asg-staging"
 ecs_asg_desired_capacity          = 1
@@ -63,11 +67,15 @@ lb_tg_name_synapse = "synapse-http-target-staging"
 
 # LB HTTPS listener pecific values
 lb_listener_ssl_policy = "ELBSecurityPolicy-2016-08"
-lb_listener_cert_arn   = "arn:aws:iam::187416307283:server-certificate/test_cert_rab3wuqwgja25ct3n4jdj2tzu4"
+lb_listener_cert_arn   = "arn:aws:acm:eu-west-1:755952719952:certificate/f96dc200-2a69-4a5d-bcaa-c57dfa5367ea"
 
-# LB listener rule specific values
-lb_listener_rule_condition_host_header_matrix-synapse = ["matrix.virtual.software.testingmachine.eu", "synapse.virtual.software.testingmachine.eu"]
-lb_listener_rule_condition_host_header_element        = ["element.virtual.software.testingmachine.eu"]
+# URLs needed for ELB and Route53
+jitsi_url   = "jitsi.virtual.software.testingmachine.eu"
+matrix_url  = "matrix.virtual.software.testingmachine.eu"
+synapse_url = "synapse.virtual.software.testingmachine.eu"
+element_url = "element.virtual.software.testingmachine.eu"
+
+route53_zone_id = "Z3R834M85QA828"
 
 # ECS Cluster Name
 ecs_cluster_name = "jitsi-matrix-cluster-staging"
