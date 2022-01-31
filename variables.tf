@@ -7,11 +7,6 @@ variable "default_tags" {
 }
 
 # EFS values
-variable "efs_name" {
-  type = string
-}
-
-# EFS values
 variable "efs_id" {
   type = string
 }
@@ -44,12 +39,13 @@ variable "ecs_sg_values" {
   type = map(any)
 }
 
-# EC2 launch configuration values for ECS service
-variable "ecs_lc_image_id" {
-  type = string
+# Subnet ingress/egress values
+variable "efs_sg_values" {
+  type = map(any)
 }
 
-variable "ecs_lc_user_data" {
+# EC2 launch configuration values for ECS service
+variable "ecs_lc_image_id" {
   type = string
 }
 
@@ -121,13 +117,25 @@ variable "lb_listener_cert_arn" {
   type = string
 }
 
-# LB listener rule specific values
-variable "lb_listener_rule_condition_host_header_matrix-synapse" {
-  type = list(string)
+# URLs needed for ELB and Route53
+variable "jitsi_url" {
+  type = string
 }
 
-variable "lb_listener_rule_condition_host_header_element" {
-  type = list(string)
+variable "matrix_url" {
+  type = string
+}
+
+variable "synapse_url" {
+  type = string
+}
+
+variable "element_url" {
+  type = string
+}
+
+variable "route53_zone_id" {
+  type = string
 }
 
 # ECS Cluster

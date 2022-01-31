@@ -6,7 +6,7 @@ resource "aws_launch_configuration" "ecs_launch_config" {
   user_data                   = var.ecs_lc_user_data
   instance_type               = var.ecs_lc_instance_type
 
-  key_name = "karls-key-pair"
+  key_name = "jitsi-cluster-key"
   depends_on = [
     var.ecs_ec2_depends_on
   ]

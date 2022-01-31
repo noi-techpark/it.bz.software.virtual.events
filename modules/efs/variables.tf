@@ -1,43 +1,11 @@
-variable "efs_name" {
+variable "efs_id" {
   type = string
 }
 
-variable "efs_encrypted" {
-  type = string
-
-  default = false
+variable "efs_subnet_ids" {
+  type = list(string)
 }
 
-variable "efs_kmsKeyId" {
-  type = string
-
-  default = ""
-}
-
-variable "efs_performance_mode" {
-  type = string
-
-  default = "generalPurpose"
-}
-
-variable "efs_throughput_mode" {
-  type = string
-
-  default = "bursting"
-}
-
-variable "ecs_task_volumes_concat" {
-  type = list(map(any))
-}
-
-variable "efs_backup_policy_status" {
-  type = string
-
-  default = "DISABLED"
-}
-
-variable "efs_backup_policy" {
-  type = string
-
-  default = ""
+variable "efs_security_groups" {
+  type = list(string)
 }
