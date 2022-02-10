@@ -13,10 +13,6 @@ resource "aws_lb" "elb" {
   #  prefix  = "test-lb"
   #  enabled = true
   #}
-
-  tags = {
-    Environment = "production"
-  }
 }
 
 // Create Target groups

@@ -1,6 +1,30 @@
 # Jitsi, Matrix/Element 
 
-## Infrastructure
+## Infrastructure Deployment
+The TF efs module currently requires that the subnets are already created, otherwise the terraform plan/apply will fail.
+- go into the root directory "it-bz-software-virtual-jitsi/"
+- first do an tf init (currently the tf state is saved localy):
+
+`terraform init`
+
+- to deploy the subnets:
+
+`terraform plan -target=module.networking --var-file=./config/staging.tfvars`
+
+`terraform apply -target=module.networking --var-file=./config/staging.tfvars`
+
+- to deploy all other resources:
+
+`terraform plan --var-file=./config/staging.tfvars`
+
+`terraform apply --var-file=./config/staging.tfvars`
+
+- to destroy all resources again (you can destroy them all at once):
+
+`terraform destroy --var-file=./config/staging.tfvars`
+
+no manual steps are needed to be performed in the AWS console.
+
 
 ### ECS: 
 Container Service and main part, currently 2 Clusters deployed:

@@ -5,6 +5,8 @@ terraform {
       version = "3.67.0"
     }
   }
+
+  #backend "s3" {}
 }
 
 provider "aws" {
@@ -124,17 +126,36 @@ module "ec2_sg" {
   }]
 }
 
-/*
-* EFS creation working, but paths for container mount not automatically created
-* need to create access points for every EFS sub-dir or manuel/lambda creates sub-dirs
-*
-* we will use the existing jtisi/matrix efs
-*/
-#module "efs" {
-#  source                  = "./modules/efs"
-#  efs_name                = var.efs_name
-#  ecs_task_volumes_concat = concat(var.ecs_task_volumes_jitsi, var.ecs_task_volumes_matrix)
-#}
+module "efs_sg" {
+  source = "./modules/security_group"
+
+  aws_vpc_id = var.aws_vpc_id
+
+  sg_values = var.efs_sg_values
+  sg_ingress_values = [{
+    ingress_description     = "efs port"
+    ingress_from_port       = 2049
+    ingress_to_port         = 2049
+    ingress_protocol        = "tcp"
+    ingress_cidr_blocks     = []
+    ingress_security_groups = [module.ec2_sg.aws_security_group_id]
+  }]
+  sg_egress_values = [{
+    egress_from_port   = 0
+    egress_to_port     = 0
+    egress_protocol    = "-1"
+    egress_destination = ["0.0.0.0/0"]
+  }]
+}
+
+# EFS mount targets for new created subnets
+module "efs_mount_targets" {
+  source = "./modules/efs"
+
+  efs_id              = var.efs_id
+  efs_subnet_ids      = module.networking.aws_subnet_id
+  efs_security_groups = [module.efs_sg.aws_security_group_id]
+}
 
 # IAM assume role for ECS cluster
 module "ecs_iam" {
@@ -151,7 +172,7 @@ module "ecs_ec2" {
   ecs_lc_image_id                   = var.ecs_lc_image_id
   ecs_lc_iam_profile                = module.ecs_iam.aws_iam_instance_profile_name
   ecs_lc_sg                         = [module.ec2_sg.aws_security_group_id]
-  ecs_lc_user_data                  = var.ecs_lc_user_data
+  ecs_lc_user_data                  = "#!/bin/bash\necho ECS_CLUSTER=${var.ecs_cluster_name} >> /etc/ecs/ecs.config"
   ecs_lc_instance_type              = var.ecs_lc_instance_type
   ecs_asg_name                      = var.ecs_asg_name
   ecs_asg_vpc_zone_identifier       = module.networking.aws_subnet_id
@@ -223,17 +244,17 @@ module "ecs_lb" {
   ]
 
   lb_listener_rules_values = [{
-    lb_listener_rule_port                  = "80"
+    lb_listener_rule_port                  = "443"
     lb_listener_rule_priority              = 100
     lb_listener_rule_action_type           = "forward"
     lb_listener_rule_action_tg_name        = var.lb_tg_name_synapse
-    lb_listener_rule_condition_host_header = var.lb_listener_rule_condition_host_header_matrix-synapse
+    lb_listener_rule_condition_host_header = [var.matrix_url, var.synapse_url]
     }, {
-    lb_listener_rule_port                  = "80"
+    lb_listener_rule_port                  = "443"
     lb_listener_rule_priority              = 99
     lb_listener_rule_action_type           = "forward"
     lb_listener_rule_action_tg_name        = var.lb_tg_name_element
-    lb_listener_rule_condition_host_header = var.lb_listener_rule_condition_host_header_element
+    lb_listener_rule_condition_host_header = [var.element_url]
   }]
 }
 
@@ -263,6 +284,9 @@ module "ecs_task_definitions_jitsi" {
     ecs_service_lb_container_name  = "web"
     ecs_service_lb_contaiener_port = 80
   }]
+
+  # Wait for mount target
+  depends_on = [module.efs_mount_targets.efs_mount_target_ids]
 }
 
 # Task definition from matrix prod or staging
@@ -287,4 +311,17 @@ module "ecs_task_definitions_matrix" {
     ecs_service_lb_container_name  = "synapse"
     ecs_service_lb_contaiener_port = 8008
   }]
+
+  # Wait for mount target
+  depends_on = [module.efs_mount_targets.efs_mount_target_ids]
+}
+
+# Add Route53 CNAME records
+module "route53_cname_record" {
+  for_each = toset([var.jitsi_url, var.matrix_url, var.element_url, var.synapse_url])
+  source = "./modules/route53"
+
+  route53_zone_id = var.route53_zone_id
+  route53_record_name = each.key
+  route53_records = [module.ecs_lb.aws_lb_dns_name]
 }
