@@ -5,7 +5,7 @@ default_tags = {
   Environment = "Production"
   Responsible = "Ebcont"
   Owner       = "NOI"
-  Porject     = "ECS Cluster"
+  Project     = "ECS Cluster"
   Info        = "Terraform"
 }
 
