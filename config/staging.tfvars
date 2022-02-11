@@ -5,7 +5,7 @@ default_tags = {
   Environment = "Staging"
   Responsible = "Ebcont"
   Owner       = "NOI"
-  Porject     = "ECS Cluster"
+  Project     = "ECS Cluster"
   Info        = "Terraform"
 }
 
@@ -100,10 +100,6 @@ ecs_task_volumes_jitsi = [{
   authorization_config_iam = "DISABLED"
 }]
 
-# ECS service names
-ecs_service_name_jitsi  = "jitsi-service-staging"
-ecs_service_name_matrix = "matrix-service-staging"
-
 # matrix task staging variables
 ecs_task_values_matrix = {
   ecs_task_name              = "matrix-task-staging"
@@ -111,6 +107,10 @@ ecs_task_values_matrix = {
   efs_volume                 = true
   requires_compatibilities   = "EC2"
 }
+
+# ECS service names
+ecs_service_name_jitsi  = "jitsi-service-staging"
+ecs_service_name_matrix = "matrix-service-staging"
 
 ecs_task_volumes_matrix = [{
   name                     = "matrix-synapse-data"
