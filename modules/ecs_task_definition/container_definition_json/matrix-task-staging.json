@@ -94,7 +94,7 @@
     },
     {
         "name": "postgres",
-        "image": "postgres:9.6",
+        "image": "postgres:14",
         "cpu": 0,
         "memory": 128,
         "links": [],
