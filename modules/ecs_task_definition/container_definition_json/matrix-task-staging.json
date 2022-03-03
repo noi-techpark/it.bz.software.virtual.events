@@ -1,7 +1,7 @@
 [
     {
         "name": "synapse",
-        "image": "matrixdotorg/synapse:v1.49.2",
+        "image": "matrixdotorg/synapse:v1.53.0",
         "cpu": 0,
         "memory": 128,
         "links": [
@@ -57,7 +57,7 @@
     },
     {
         "name": "element",
-        "image": "vectorim/element-web:v1.10.1",
+        "image": "vectorim/element-web:v1.10.6",
         "cpu": 0,
         "memory": 128,
         "links": [
@@ -94,7 +94,7 @@
     },
     {
         "name": "postgres",
-        "image": "postgres:9.6",
+        "image": "postgres:14.2",
         "cpu": 0,
         "memory": 128,
         "links": [],
