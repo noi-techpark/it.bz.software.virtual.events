@@ -232,7 +232,7 @@ module "ecs_lb" {
     lb_listener_ssl_policy          = "" //empty for http
     lb_listener_cert_arn            = "" //empty for http
     lb_listener_default_action_type = "redirect"
-    lb_listener_default_tg_name     = ""
+    lb_listener_default_tg_name     = "" //empty for http -> https redirect
     }, {
     lb_listener_port                = "443"
     lb_listener_protocol            = "HTTPS"
@@ -266,11 +266,24 @@ module "ecs_cluster" {
   ecs_cluster_name = var.ecs_cluster_name
 }
 
+# Search for the new created Instance, needed for Jitsi docker_host_address
+data "aws_instance" "ecs_instance" {
+  filter {
+    name   = "tag:aws:autoscaling:groupName"
+    values = ["jitsi-matrix-asg-*"]
+  }
+
+  depends_on = [
+    module.ecs_ec2.autoscaling_group_arn
+  ]
+}
+
 # Task definition from jitsi meet prod or staging
 module "ecs_task_definitions_jitsi" {
   source = "./modules/ecs_task_definition"
 
-  ecs_task_values  = var.ecs_task_values_jitsi
+  ecs_task_values  = merge(var.ecs_task_values_jitsi, { 
+    docker_host_address = data.aws_instance.ecs_instance.public_ip } )
   file_system_id   = var.efs_id
   ecs_task_volumes = var.ecs_task_volumes_jitsi
 
@@ -286,8 +299,37 @@ module "ecs_task_definitions_jitsi" {
   }]
 
   # Wait for mount target
-  depends_on = [module.efs_mount_targets.efs_mount_target_ids]
+  depends_on = [
+    module.efs_mount_targets.efs_mount_target_ids,
+    module.ecs_ec2.autoscaling_group_arn
+  ]
 }
+
+# Postgres Upgrade task
+# remove comment and add comment below to add/remove services from ECS
+#module "ecs_task_definitions_postgres_upgrade" {
+#  source = "./modules/ecs_task_definition"
+#
+#  ecs_task_values  = {
+#    ecs_task_name              = "postgres-upgrade-task"
+#    container_definitions_path = "./modules/ecs_task_definition/container_definition_json/postgres_upgrade.tftpl"
+#    requires_compatibilities   = "EC2"
+#  }
+#  file_system_id   = var.efs_id
+#  ecs_task_volumes = [{
+#    name                     = "matrix-postres-data"
+#    root_directory           = "/matrix/postgres/data"
+#    transit_encryption       = "DISABLED"
+#    authorization_config_iam = "DISABLED"
+#  }]
+#
+#  # ECS Service values
+#  ecs_service_name          = "postgres-upgrade-service"
+#  ecs_cluster_id            = module.ecs_cluster.ecs_cluster_id
+#  ecs_service_desired_count = 1
+#
+#  ecs_service_lb_values = []
+#}
 
 # Task definition from matrix prod or staging
 module "ecs_task_definitions_matrix" {
@@ -313,7 +355,10 @@ module "ecs_task_definitions_matrix" {
   }]
 
   # Wait for mount target
-  depends_on = [module.efs_mount_targets.efs_mount_target_ids]
+  depends_on = [
+    module.efs_mount_targets.efs_mount_target_ids,
+    module.ecs_ec2.autoscaling_group_arn
+  ]
 }
 
 # Add Route53 CNAME records

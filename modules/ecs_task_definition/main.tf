@@ -1,6 +1,6 @@
 resource "aws_ecs_task_definition" "ecs_task_definition" {
   family                   = var.ecs_task_values.ecs_task_name
-  container_definitions    = file(var.ecs_task_values.container_definitions_path)
+  container_definitions    = templatefile(var.ecs_task_values.container_definitions_path, { docker_host_address = var.ecs_task_values.docker_host_address })
   requires_compatibilities = [var.ecs_task_values.requires_compatibilities]
 
   dynamic "volume" {

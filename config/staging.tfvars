@@ -17,7 +17,7 @@ aws_vpc_id = "vpc-f57aea91"
 subnet_values = [{
   subnet_name = "jitsi-matrix-subnet-1-staging"
   az          = "eu-west-1a",
-  cidr_block  = "172.31.48.0/28" // 172.31.0.0
+  cidr_block  = "172.31.48.0/28"
   }, {
   subnet_name = "jitsi-matrix-subnet-2-staging"
   az          = "eu-west-1b",
@@ -83,9 +83,10 @@ ecs_cluster_name = "jitsi-matrix-cluster-staging"
 # jitsi meet task staging variables
 ecs_task_values_jitsi = {
   ecs_task_name              = "jitsi-meet-task-staging"
-  container_definitions_path = "./modules/ecs_task_definition/container_definition_json/jitsi-meet-task-staging.json"
+  container_definitions_path = "./modules/ecs_task_definition/container_definition_json/jitsi-meet-task-staging.tftpl"
   efs_volume                 = true
   requires_compatibilities   = "EC2"
+  docker_host_address        = ""
 }
 
 ecs_task_volumes_jitsi = [{
@@ -103,9 +104,10 @@ ecs_task_volumes_jitsi = [{
 # matrix task staging variables
 ecs_task_values_matrix = {
   ecs_task_name              = "matrix-task-staging"
-  container_definitions_path = "./modules/ecs_task_definition/container_definition_json/matrix-task-staging.json"
+  container_definitions_path = "./modules/ecs_task_definition/container_definition_json/matrix-task-staging.tftpl"
   efs_volume                 = true
   requires_compatibilities   = "EC2"
+  docker_host_address        = ""
 }
 
 # ECS service names
