@@ -9,6 +9,11 @@ default_tags = {
   Info        = "Terraform"
 }
 
+# set to true, if postgreSQL upgrade will be done
+# this will deactivate the matrix-service and 
+# active just the postgresql-service
+postgresql_upgrade = false
+
 # efs for staging
 efs_id = "fs-bce67e88"
 
@@ -45,8 +50,9 @@ efs_sg_values = {
 }
 
 # EC2 autoscaling and launch configuration values for ECS service
-ecs_lc_image_id                   = "ami-06bb94c46ddc47feb" //"ami-0e8f6957a4eb67446"
+ecs_lc_image_id                   = "ami-06bb94c46ddc47feb"
 ecs_lc_instance_type              = "c5a.large"
+ecs_lc_key                        = "jitsi-cluster-key"
 ecs_asg_name                      = "jitsi-matrix-asg-staging"
 ecs_asg_desired_capacity          = 1
 ecs_asg_min_size                  = 1

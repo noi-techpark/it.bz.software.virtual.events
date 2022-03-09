@@ -26,7 +26,7 @@ The TF efs module currently requires that the subnets are already created, other
 no manual steps are needed to be performed in the AWS console.
 
 ## PostgreSQL upgrade
-First connect to the EC2 instance and created a DB dump:
+First connect to the EC2 instance and create a DB dump:
 
 `docker exec -it <postgres_container> /bin/bash`
 
@@ -34,7 +34,7 @@ First connect to the EC2 instance and created a DB dump:
 
 Make sure the backup is saved on the EFS mount.
 
-Now in the main.tf file, add a comment at the beginning of the every line for the "ecs_task_definitions_matrix" module (currently line 335-355)
+Stop the matrix service in the ECS Console.
 
 deploy the new resources:
 
@@ -60,7 +60,7 @@ mkdir -p /mnt/efs/fs/matrix/postgres_bak/data/
 mv /mnt/efs/fs/matrix/postgres/data/* /mnt/efs/fs/matrix/postgres_bak/data/
 ```
 
-Remove the comments for the "ecs_task_definitions_postgres_upgrade" module, also in the main.tf (currently line 310-332) and start a new TF deployment:
+Set the variable postgresql_upgrade in config/staging.tfvars to true and start a new TF deployment:
 
 `terraform plan --var-file=./config/staging.tfvars`
 

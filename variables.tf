@@ -168,3 +168,11 @@ variable "ecs_service_name_jitsi" {
 variable "ecs_service_name_matrix" {
   type = string
 }
+
+variable "postgresql_upgrade" {
+  type = bool
+}
+
+variable "ecs_lc_key" {
+  type = string
+}
