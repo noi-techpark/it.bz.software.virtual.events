@@ -1,0 +1,64 @@
+[
+    {
+        "name": "postgres",
+        "image": "postgres:14.2",
+        "cpu": 0,
+        "memory": 128,
+        "links": [],
+        "portMappings": [
+            {
+                "containerPort": 5432,
+                "hostPort": 5432,
+                "protocol": "tcp"
+            }
+        ],
+        "essential": true,
+        "entryPoint": [],
+        "command": [],
+        "environment": [
+            {
+                "name": "POSTGRES_USER",
+                "value": "synapse"
+            },
+            {
+                "name": "POSTGRES_PASSWORD",
+                "value": "Gly4y8pChg"
+            },
+            {
+                "name": "POSTGRES_INITDB_ARGS",
+                "value": "--encoding='UTF8' --lc-collate='C' --lc-ctype='C'"
+            },
+            {
+                "name": "POSTGRES_DB",
+                "value": "synapse"
+            }
+        ],
+        "mountPoints": [
+            {
+                "sourceVolume": "matrix-postres-data",
+                "containerPath": "/var/lib/postgresql/data"
+            }
+        ],
+        "volumesFrom": [],
+        "linuxParameters": {
+            "capabilities": {}
+        },
+        "hostname": "postgres",
+        "privileged": false,
+        "readonlyRootFilesystem": false,
+        "dnsServers": [],
+        "dnsSearchDomains": [],
+        "dockerSecurityOptions": [],
+        "pseudoTerminal": false,
+        "healthCheck": {
+            "command": [
+                "CMD-SHELL",
+                "pg_isready"
+            ],
+            "interval": 10,
+            "timeout": 5,
+            "retries": 5,
+            "startPeriod": 5
+        }
+    }
+]

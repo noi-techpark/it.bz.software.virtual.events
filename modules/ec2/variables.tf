@@ -51,3 +51,7 @@ variable "ecs_asg_health_check_type" {
 
   default = "EC2"
 }
+
+variable "ecs_lc_key" {
+  type = string
+}

@@ -9,6 +9,11 @@ default_tags = {
   Info        = "Terraform"
 }
 
+# set to true, if postgreSQL upgrade will be done
+# this will deactivate the matrix-service and 
+# active just the postgresql-service
+postgresql_upgrade = false
+
 # efs for staging
 efs_id = "fs-bce67e88"
 
@@ -17,7 +22,7 @@ aws_vpc_id = "vpc-f57aea91"
 subnet_values = [{
   subnet_name = "jitsi-matrix-subnet-1-staging"
   az          = "eu-west-1a",
-  cidr_block  = "172.31.48.0/28" // 172.31.0.0
+  cidr_block  = "172.31.48.0/28"
   }, {
   subnet_name = "jitsi-matrix-subnet-2-staging"
   az          = "eu-west-1b",
@@ -45,8 +50,9 @@ efs_sg_values = {
 }
 
 # EC2 autoscaling and launch configuration values for ECS service
-ecs_lc_image_id                   = "ami-06bb94c46ddc47feb" //"ami-0e8f6957a4eb67446"
+ecs_lc_image_id                   = "ami-06bb94c46ddc47feb"
 ecs_lc_instance_type              = "c5a.large"
+ecs_lc_key                        = "jitsi-cluster-key"
 ecs_asg_name                      = "jitsi-matrix-asg-staging"
 ecs_asg_desired_capacity          = 1
 ecs_asg_min_size                  = 1
@@ -83,9 +89,10 @@ ecs_cluster_name = "jitsi-matrix-cluster-staging"
 # jitsi meet task staging variables
 ecs_task_values_jitsi = {
   ecs_task_name              = "jitsi-meet-task-staging"
-  container_definitions_path = "./modules/ecs_task_definition/container_definition_json/jitsi-meet-task-staging.json"
+  container_definitions_path = "./modules/ecs_task_definition/container_definition_json/jitsi-meet-task-staging.tftpl"
   efs_volume                 = true
   requires_compatibilities   = "EC2"
+  docker_host_address        = ""
 }
 
 ecs_task_volumes_jitsi = [{
@@ -103,9 +110,10 @@ ecs_task_volumes_jitsi = [{
 # matrix task staging variables
 ecs_task_values_matrix = {
   ecs_task_name              = "matrix-task-staging"
-  container_definitions_path = "./modules/ecs_task_definition/container_definition_json/matrix-task-staging.json"
+  container_definitions_path = "./modules/ecs_task_definition/container_definition_json/matrix-task-staging.tftpl"
   efs_volume                 = true
   requires_compatibilities   = "EC2"
+  docker_host_address        = ""
 }
 
 # ECS service names

@@ -25,6 +25,70 @@ The TF efs module currently requires that the subnets are already created, other
 
 no manual steps are needed to be performed in the AWS console.
 
+## PostgreSQL upgrade
+First connect to the EC2 instance and create a DB dump:
+
+`docker exec -it <postgres_container> /bin/bash`
+
+`/usr/bin/pg_dump -U synapse synapse > /var/lib/postgresql/data/backups/synapse-backup.sql`
+
+Make sure the backup is saved on the EFS mount.
+
+Stop the matrix service in the ECS Console.
+
+deploy the new resources:
+
+`terraform plan --var-file=./config/staging.tfvars`
+
+`terraform apply --var-file=./config/staging.tfvars`
+
+this will stop the matrix/element application. Now you can move the old postgreSQL data to a backup folder:
+
+```
+# mount the efs if not already one
+file_system_id_1=<fs_id>
+efs_mount_point_1=/mnt/efs/fs
+mkdir -p "${efs_mount_point_1}"
+test -f "/sbin/mount.efs" && printf "\n${file_system_id_1}:/ ${efs_mount_point_1} efs tls,_netdev\n" >> /etc/fstab || printf "\n${file_system_id_1}.efs.eu-west-1.amazonaws.com:/ ${efs_mount_point_1} nfs4 nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport,_netdev 0 0\n" >> /etc/fstab
+test -f "/sbin/mount.efs" && grep -ozP 'client-info]\nsource' '/etc/amazon/efs/efs-utils.conf'; if [[ $? == 1 ]]; then printf "\n[client-info]\nsource=liw\n" >> /etc/amazon/efs/efs-utils.conf; fi;
+retryCnt=15; waitTime=30; while true; do mount -a -t efs,nfs4 defaults; if [ $? = 0 ] || [ $retryCnt -lt 1 ]; then echo File system mounted successfully; break; fi; echo File system not available, retrying to mount.; ((retryCnt--)); sleep $waitTime; done;
+```
+
+```
+# remove the old backup files if needed
+mkdir -p /mnt/efs/fs/matrix/postgres_bak/data/
+mv /mnt/efs/fs/matrix/postgres/data/* /mnt/efs/fs/matrix/postgres_bak/data/
+```
+
+Set the variable postgresql_upgrade in config/staging.tfvars to true and start a new TF deployment:
+
+`terraform plan --var-file=./config/staging.tfvars`
+
+`terraform apply --var-file=./config/staging.tfvars`
+
+This will now start only a postgreSQL with the version defined in the "postgres_upgrade.tftpl" file.
+
+Copy the backup file to the new created PostgreSQL data folder:
+
+```
+mkdir -p /mnt/efs/fs/matrix/postgres/data/backups/
+cp /mnt/efs/fs/matrix/postgres_bak/data/backups/synapse-backup.sql /mnt/efs/fs/matrix/postgres/data/backups/
+docker exec -it <postgres_container> /bin/bash
+psql synapse < /var/lib/postgresql/data/backups/synapse-backup.sql
+```
+
+Change the comments in the main.tf back again and do the final deployment with the new PostgreSQL version:
+
+`terraform plan --var-file=./config/staging.tfvars`
+
+`terraform apply --var-file=./config/staging.tfvars`
+
+## Element Upgrade
+
+For the Element upgrade you need to do something similar as the postgreSQL upgrade. Stop the task in the ECS Console.
+Connect to the host (make sure the EFS is mounted), move the "/mnt/efs/fs/matrix/element/" to a backup location and wait until ECS starts the task again (can take up to 10 min).
+
+The new Element verison is now started, you only need to check the config.json for customization, or copy the old config.json from the backup location.
 
 ### ECS: 
 Container Service and main part, currently 2 Clusters deployed:
