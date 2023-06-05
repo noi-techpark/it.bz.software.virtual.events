@@ -1,0 +1,12 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: it.bz.software.virtual.events
+Upstream-Contact: NOI Techpark <digital@noi.bz.it>
+Source: https://github.com/noi-techpark/it.bz.software.virtual.events
+
+Files: .gitignore LICENSE *.conf config/* docs/*
+Copyright: (c) NOI Techpark <digital@noi.bz.it>
+License: CC0-1.0
+
+Files: *.tf modules/ecs_task_definition/container_definition_json/*
+Copyright: (c) NOI Techpark <digital@noi.bz.it>
+License: AGPL-3.0-or-later
